@@ -131,37 +131,39 @@ Taro should do, for example, as follows:
 int M = 1000000007;
 using namespace std;
 
-int pre_sum[401];
-int dp[401][401];
-int arr[401];
+int prefix_sum[407];
+int arr[407];
+int dp[407][407];
 
-int func(int start, int end){
+ull solve(int start, int end){
     if(start == end)return 0;
-    if(start > end)return 0;
+    if(start > end)return M;
 
-    if(dp[start][end]!=-1)return dp[start][end];
+    if(dp[start][end] != -1)return dp[start][end];
 
-    int ans = INT_MAX;
-    for(int i=start; i<end; i++){
-        ans = min(ans,func(start,i) + func(i+1,end) + pre_sum[end] - pre_sum[start-1]);
+    ull ans = ULLONG_MAX;
+    for(int i = start; i < end; i++){
+        ans = min(ans,solve(start,i) + solve(i+1,end)+ 0LL + prefix_sum[end]-prefix_sum[start-1]);
     }
 
-    return dp[start][end] = ans;    
+    return ans;
 }
 
 int main(){
-    ios::sync_with_stdio(0);
+    ios_base::sync_with_stdio(0);
     cin.tie(0);
     cout.tie(0);
+
+    memset(dp,-1,sizeof(dp));
 
     int n;
     cin >> n;
 
-    for(int i = 1;i<=n; i++){
+    for(int i = 1; i <= n; i++){
         cin >> arr[i];
-        pre_sum[i] = arr[i] + pre_sum[i-1];
-    }    
+        prefix_sum[i] = prefix_sum[i-1] + arr[i];
+    }
 
-    int ans = func(1,n);
-    cout<<ans;
+    cout << solve(1,n);
+
     return 0;}

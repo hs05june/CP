@@ -73,28 +73,13 @@ float n;
 int arr[100];
 float dp[100][100][100];
 
-float solve(float left, mii count){
-    if(left == 0)return 0;
-    // if(dp[count[1]][count[2]][count[3]]!=0)return dp[count[1]][count[2]][count[3]];
+float solve(int one, int two, int three){
+    if((one + two + three) == 0)return 0;
 
-    float ans = (float)n/left;
-    float ways = 0;
-    float prev = 0;
+    if(dp[one][two][three]!=0)return dp[one][two][three];
 
-    for(auto i : count){
-        if(count[i.first]!=0){
-            ways+=count[i.first];
-            if(i.first==1){count[i.first]--;
-            prev += (left == 1) ? n : solve(left-1,count);}
-            else {count[i.first]--;count[i.first-1]++;
-            prev +=(left == 1) ? n : solve(left,count);}
-            
-            if(i.first==1){count[i.first]++;}
-            else {count[i.first]++;count[i.first-1]--;}
-        }
-    }
-    ans += (prev/ways);
-    return ans;
+    float total = (float)one + two + (float)three;
+    return dp[one][two][three] = n/total + (one ? one*(solve(one-1,two,three))/total : 0) + (two ? two*(solve(one+1,two-1,three))/total : 0) + (three ? three*(solve(one,two+1,three-1))/total : 0);
 }
 
 int main(){
@@ -105,7 +90,6 @@ int main(){
 // total / number of non - zeros
     cin >> n;
     mii count;
-    // count.insert({0,0});
     count.insert({1,0});
     count.insert({2,0});
     count.insert({3,0});
@@ -115,7 +99,7 @@ int main(){
         count[arr[i]]++;
     }
 
-    float ans = solve(n,count);
+    float ans = solve(count[1],count[2],count[3]);
     cout<<ans;
 
     return 0;}

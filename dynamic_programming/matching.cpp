@@ -97,53 +97,57 @@ Be sure to print the number modulo 10^9 +7.
 int M = 1000000007;
 using namespace std;
 
-int N;
-int arr[22][22];
-deq compatible_females[22];
 ll dp[22][1<<22];
+deq females[22];
+int N;
 
-ll func(int n, int bitmask){
-
-    if(n>N){
+ll solve(int male, ll bitmask){
+    
+    if(male<=0){
         bool x = true;
-        for(int i=1;i<=N;i++){
-            if((bitmask & (1<<i)) == 0){x = false;break;}
+        for(int i = 1; i<=N;i++){
+            if((bitmask & (1<<i))==0){
+                x = false;
+                break;
+            }
         }
         return x ? 1 : 0;
     }
 
-    if(dp[n][bitmask]!=-1)return dp[n][bitmask];
+    if(dp[male][bitmask]!=-1)return (dp[male][bitmask]%M);
 
     ll ways = 0;
-
-    for(auto i : compatible_females[n]){
-        if((bitmask & (1<<i))==0){
+    
+    for(auto i : females[male]){
+        if((bitmask & (1<<i)) == 0){
             bitmask |= (1<<i);
-            ways = ((ways%M) + func(n+1, bitmask)%M)%M;
+            ways = ((ways%M) + (solve(male-1, bitmask)%M))%M;
             bitmask &= (~(1<<i));
         }
     }
-    return dp[n][bitmask] = (ways%M);
+
+    return dp[male][bitmask] = (ways%M);
+
 }
 
 int main(){
-    ios::sync_with_stdio(0);
+    ios_base::sync_with_stdio(0);
     cin.tie(0);
     cout.tie(0);
 
     memset(dp,-1,sizeof(dp));
 
     cin >> N;
+    int x;
 
     for(int i = 1; i<=N; i++){
         for(int j = 1; j<=N; j++){
-            cin >>  arr[i][j];
-            if(arr[i][j]==1){
-                compatible_females[i].push_back(j);
-            }
+            cin >> x;
+            if(x==1){females[i].push_back(j);}
         }
-    }    
+    }
 
-    cout<<func(1,1)%M;
+    int ans = solve(N,1)%M;
+    cout<<ans;
 
     return 0;}
