@@ -86,12 +86,12 @@ deq costs;
 
 // BOTTOM TO TOP
 
-int min_cost(int n,int target){
-  if(n>target)return M;
-  if(n == target)return 0;
-  if(dp[n]!=-1)return dp[n];
-  return dp[n] = min(abs(h[n]-h[n+1])+min_cost(n+1,target),abs(h[n+2]-h[n])+min_cost(n+2,target));
-}
+// int min_cost(int n,int target){
+//   if(n>target)return M;
+//   if(n == target)return 0;
+//   if(dp[n]!=-1)return dp[n];
+//   return dp[n] = min(abs(h[n]-h[n+1])+min_cost(n+1,target),abs(h[n+2]-h[n])+min_cost(n+2,target));
+// }
 
 
 int main(){
@@ -111,6 +111,12 @@ int main(){
     // cout<<min_cost(n);
     // sort(costs.begin(),costs.end());
     // cout<<costs[0];
-    cout<<min_cost(1,n);
+    dp[1] = 0;
+    dp[2] = abs(h[2]-h[1]);
+
+    for(int i = 3; i<=n;i++){
+      dp[i] = min(dp[i-2]+abs(h[i]-h[i-2]),dp[i-1]+abs(h[i]-h[i-1]));
+    }
+    cout<<dp[n];
 
     return 0;}

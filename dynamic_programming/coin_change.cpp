@@ -41,26 +41,26 @@ deq coins;
 int n;
 int dp[1000];
 
-int min_number_of_coins(int amount){
-    if(amount == 0)return 0;
+// int min_number_of_coins(int amount){
+//     if(amount == 0)return 0;
 
-    if(dp[n]!=-1)return dp[n];
+//     if(dp[n]!=-1)return dp[n];
 
-    int ans = M;
-    for(auto i : coins){
-        if(amount - i >= 0){
-        ans = min(ans,1+min_number_of_coins(amount-i));}
-    }
+//     int ans = M;
+//     for(auto i : coins){
+//         if(amount - i >= 0){
+//         ans = min(ans,1+min_number_of_coins(amount-i));}
+//     }
     
-    return dp[n] = ans;
-}
+//     return dp[n] = ans;
+// }
 
 int main(){
     ios::sync_with_stdio(0);
     cin.tie(0);
     cout.tie(0);
 
-    memset(dp,-1, sizeof(dp));
+    // memset(dp,-1, sizeof(dp));
 
     int amount;
     cin >> n;
@@ -74,7 +74,18 @@ int main(){
     cin >> amount;
     sort(coins.begin(),coins.end());
     reverse(coins.begin(),coins.end());
-    int ans = min_number_of_coins(amount);
-    ans == M ? cout<<"-1\n" : cout<< ans <<'\n';
+    // int ans = min_number_of_coins(amount);
+    // ans == M ? cout<<"-1\n" : cout<< ans <<'\n';
+    dp[0] = 0;
+    for(int i = 1; i <= amount; i++){
+        int ans = M;
+        for(int j = 0; j < n; j++){
+            if(i<coins[j])break;
+            ans = min(ans,1+dp[i-coins[j]]);
+        }
+        dp[i] = ans;
+    }
+
+    cout << dp[amount];
 
     return 0;}

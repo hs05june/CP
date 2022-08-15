@@ -43,28 +43,28 @@ int M = 1000000007;
 using namespace std;
 
 deq coins;
-int dp[1000][1000];
+int dp[1000];
 int n;
 
-int func(int amount,int index){
-    if(amount == 0) return 1;
-    if(index == n || amount < 0)return 0;
-    if(dp[amount][index]!=-1)return dp[amount][index];
-    int z = amount;
-    int ans = 0;
-    while(z >=0){
-        ans += func(z,index+1);
-            z -= coins[index];
-    }
-    return dp[amount][index] = ans;
-}
+// int func(int amount,int index){
+//     if(amount == 0) return 1;
+//     if(index == n || amount < 0)return 0;
+//     if(dp[amount][index]!=-1)return dp[amount][index];
+//     int z = amount;
+//     int ans = 0;
+//     while(z >=0){
+//         ans += func(z,index+1);
+//             z -= coins[index];
+//     }
+//     return dp[amount][index] = ans;
+// }
 
 int main(){
     ios::sync_with_stdio(0);
     cin.tie(0);
     cout.tie(0);
 
-    memset(dp,-1,sizeof(dp));
+    // memset(dp,-1,sizeof(dp));
 
     cin >> n;
 
@@ -80,6 +80,19 @@ int main(){
     sort(coins.begin(),coins.end());
     reverse(coins.begin(),coins.end());
 
-    cout << func(amount,0);
+    // cout << func(amount,0);
+    dp[0] = 1;
+
+    for(int i = 1; i <= amount; i++){
+        for(int j = 0; j<n; j++){
+            if(i<coins[j])break;
+            int z = i;
+            while(z>=coins[j]){
+                z-=coins[j];
+            dp[i]+=(dp[z]);}
+        }
+    }
+
+    cout << dp[amount];
 
     return 0;}
