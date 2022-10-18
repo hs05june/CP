@@ -6,16 +6,16 @@ using namespace std;
 
 double precision = 0.00001;
 
-double nth_root(int n,double num){
+double nth_root(double num){
     double low = num >=1 ? 1 : num;
     double high = num>=1 ? num : 1;
 
     while(high - low > precision){
         double mid = (high+low)/2;
-        if(pow(mid,n)>num)high = mid;
+        if(mid*mid>num)high = mid;
         else low = mid;
     }
-    return low;
+    return high;
 }
 
 int main(){
@@ -23,12 +23,13 @@ int main(){
     cin.tie(0);
     cout.tie(0);
 
-    int n;
-    cin>>n;
+    // int n;
+    // cin>>n;
 
-    double num;
-    cin>>num;
+    // double num;
+    // cin>>num;
 
-    double ans = nth_root(n,num);
+    long long ans = nth_root(1000000000000000000);
     cout<<ans<<"\n";
+
     return 0;}

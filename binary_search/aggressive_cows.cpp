@@ -76,6 +76,10 @@ int main(){
     cin.tie(0);
     cout.tie(0);
 
+    int t;
+    cin >> t;
+    while(t--){
+
     cin>>N>>c;
     for(int i = 0; i < N; i++){
         cin>>arr[i];
@@ -84,6 +88,6 @@ int main(){
     sort(arr,arr+N);
 
     int ans = max_minimum_distance();
-    cout<<ans;
+    cout<<ans;}
 
     return 0;}
