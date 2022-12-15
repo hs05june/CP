@@ -19,6 +19,8 @@ int main(){
     cin.tie(0);
     cout.tie(0);
 
-    
+    ll z = 1;
+
+    cout << __builtin_clzll(z) <<"\n"; 
 
     return 0;}

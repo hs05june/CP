@@ -59,55 +59,56 @@ Copy
 Items 2,4 and 5 should be taken. Then, the sum of the weights is 5+6+3=14, and the sum of the values is 6+6+5=17.
 */
 
+//							  ੴ  ਵਾਹਿਗੁਰੂ 
+
 #include<bits/stdc++.h>
+#define rp(i,a,n) for(int i=a;i<n;i++)
+#define rep(i,a,n) for(int i=a;i<=n;i++)
 #define ll long long
-#define ull unsigned long long
-#define deq deque<int>
-#define mii map<int,int>
-#define pii pair<int,int>
-int M = 1000000007;
+#define int long long
+#define deq deque<ll>
+#define mii map<ll,ll>
+#define pii pair<ll,ll>
+#define pb push_back
+#define f first
+#define s second
+#define sz(a) (int)a.size()
+#define all(x) (x).begin(), (x).end()
+#define lb(a,b) lower_bound((a).begin(),(a).end(),c)
+const ll M = 1000000007;
 using namespace std;
 
-int dp[1000][1000];
 int N,W;
-pair<int, int> p[1000];
+int dp[105][100005];
+int w[105],v[105];
+int solve(int index, int value){
+    if(value==0)return 0;
+    if(index>N && value!=0)return INT_MAX;
 
-int func(int value,int index){
-   if(value == 0)return 0;
-   if(index >= N)return M;
-   if(dp[value][index]!=-1)return dp[value][index];
+    if(dp[index][value]!=-1)return dp[index][value];
 
-   return dp[value][index] = (value - p[index].first) >= 0 ? min(func(value,index+1),p[index].second+func(value- p[index].first,index+1)) : func(value,index+1);
+    return dp[index][value] = min(w[index]+solve(index+1,value-v[index]),solve(index+1,value));
 }
 
-int main(){
-    ios::sync_with_stdio(0);
-    cin.tie(0);
-    cout.tie(0);
+signed main(){
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);cout.tie(0);
+    cout << fixed << setprecision(20);
 
-    memset(dp, -1, sizeof(dp));
+    memset(dp,-1,sizeof(dp));
 
+    // int n,w;
     cin >> N >> W;
 
-    int max_value = 0;
-    int max_weight = 0;
+    int sum = 0;
 
-    for(int i = 0; i < N; i++){
-        int w,v;
-        cin >> w >> v;
-        max_value += v;
-        max_weight += w;
-        p[i] = make_pair(v,w);
+    rep(i,1,N){cin >> w[i] >> v[i];sum+=v[i];}
+
+    for(int i = sum; i >=0 ; i--){
+        if(solve(1,i)<=W){
+            cout << i;
+            return 0;
+        }
     }
-
-    int ans = max_value;
-
-    for(;ans>=0;ans--){
-        if(func(ans,0)<=W){break;}
-    }
-
-    // cout<<max_value<<" "<<max_weight<<endl; 
-
-    cout<<ans;
 
     return 0;}

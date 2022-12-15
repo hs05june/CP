@@ -52,7 +52,7 @@ void selection_sort(int n){
     }
 }
 
-void merge(int low,int mid,int high){
+void merge(int arr[],int low,int mid,int high){
     int temp[high-low+1];
     int k = 0,i=low,j=mid+1;
     while(i<=mid && j<=high){
@@ -67,7 +67,7 @@ void merge(int low,int mid,int high){
     }
 }
 
-void merge_sort(int low,int high){
+void merge_sort(int arr[], int low,int high){
     if(low<high){
         int mid=(low+high)/2;
         merge_sort(arr,low,mid);

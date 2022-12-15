@@ -72,56 +72,62 @@ Copy
 The red directed path in the following figure is one of the longest:
 */
 
+//							  ੴ  ਵਾਹਿਗੁਰੂ 
+
 #include<bits/stdc++.h>
+#define rp(i,a,n) for(int i=a;i<n;i++)
+#define rep(i,a,n) for(int i=a;i<=n;i++)
 #define ll long long
-#define ull unsigned long long
-#define deq deque<int>
-#define mii map<int,int>
-#define pii pair<int,int>
-int M = 1000000007;
+#define int long long
+#define deq deque<ll>
+#define mii map<ll,ll>
+#define pii pair<ll,ll>
+#define pb push_back
+#define f first
+#define s second
+#define sz(a) (int)a.size()
+#define all(x) (x).begin(), (x).end()
+#define lb(a,b) lower_bound((a).begin(),(a).end(),c)
+const ll M = 1000000007;
 using namespace std;
 
-deq graph[100];
-int dp[100];
+deq graph[100005];
+int dp[100005];
 
-int solve(int start){
+int solve(int n){
     int ans = 0;
-    
-    if(dp[start]!=-1)return dp[start];
 
-    for(auto i : graph[start]){
-        if(dp[i]!=-1){
-            ans = max(ans, 1 + dp[i]);
-        }
-        else{
-            ans = max(ans,1 + solve(i));
-        }
+    if(dp[n]!=-1)return dp[n];
+
+    rp(i,0,graph[n].size()){
+        ans = max(ans,1+solve(graph[n][i]));
     }
-    return dp[start] = ans;
+
+    return dp[n]=ans;
 }
 
-int main(){
-    ios::sync_with_stdio(0);
-    cin.tie(0);
-    cout.tie(0);
+signed main(){
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);cout.tie(0);
+    cout << fixed << setprecision(20);
 
     memset(dp,-1,sizeof(dp));
 
-    int N,M;
-    cin >> N >> M;
+    int n,m;
+    cin >> n >> m;
 
-    for(int i = 0; i < M; i++){
-        int a,b;
-        cin >> a >> b;
-        graph[a].push_back(b);
+    while(m--){
+        int x,y;
+        cin >> x >> y;
+        graph[x].pb(y);
     }
 
-    int ans = 0;
+    ll ans = 0;
 
-    for(int i = 1; i <= N; i++){
+    rep(i,1,n){
         ans = max(ans,solve(i));
     }
 
-    cout << ans;
+    cout << ans << '\n';
 
     return 0;}
