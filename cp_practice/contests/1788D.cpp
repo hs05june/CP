@@ -23,43 +23,50 @@ int power(int a, int b, int mod){
         b >>= 1;}
     return ans%mod;}
 
-ll modInverse(ll n,ll mod){
-    return power(n,mod-2,mod)%mod;}
-
 signed main(){
     ios_base::sync_with_stdio(0);
     cin.tie(0);cout.tie(0);
     cout << fixed << setprecision(20);
 
     int t = 1;
-    cin >> t;
 
     while(t--){
 
         int n;
         cin >> n;
 
-        int arr[n];
+        int arr[n+2];
 
-        rp(i,0,n){
+        for(int i = 1; i<=n; i++){
             cin >> arr[i];
         }
 
-        rp(i,0,n){
-            if(arr[i]==1)arr[i]++;
-        }
-        rp(i,1,n){
-            if(arr[i]%arr[i-1]==0){
-                arr[i]++;
+        deq left[n+1],right[n+1];
+
+        for(int i = 1; i<=n; i++){
+            int x = arr[i];
+            for(int j = i - 1; j >= 1; j--){
+                left[i].pb(x-arr[j]);
+            }
+            for(int j = i + 1; j <= n; j++){
+                right[i].pb(arr[j]-x);
             }
         }
 
-        rp(i,0,n){
-            cout << arr[i] <<" ";
+        int ans = 0;
+
+        for(int i = 1; i<=n; i++){
+            for(int j = i+1; j <= n; j++){
+                int x = abs(arr[j]-arr[i]);
+                auto itr1 = upper_bound(all(left[i]),x);
+                auto itr2 = lower_bound(all(right[j]),x);
+                int z1 = itr1 - left[i].begin();
+                int z2 = itr2 - right[j].begin();
+                int l = sz(left[i]) - z1, r = sz(right[j]) - z2;
+                ans = (ans%M + power(2,l+r,M)%M)%M;
+            }
         }
-
-        cout << "\n";
-
+        cout << ans << "\n";
     }
 
     return 0;}

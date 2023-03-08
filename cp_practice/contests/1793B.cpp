@@ -15,17 +15,6 @@
 const ll M = 1000000007;
 using namespace std;
 
-int power(int a, int b, int mod){
-    int ans = 1;
-    while (b > 0){
-        if (b & 1){ans = (ans%mod * 1LL * a%mod) % mod;}
-        a = (a%mod * 1LL * a%mod) % mod;
-        b >>= 1;}
-    return ans%mod;}
-
-ll modInverse(ll n,ll mod){
-    return power(n,mod-2,mod)%mod;}
-
 signed main(){
     ios_base::sync_with_stdio(0);
     cin.tie(0);cout.tie(0);
@@ -36,22 +25,39 @@ signed main(){
 
     while(t--){
 
-        int n;
-        cin >> n;
+        int x,y;
+        cin >> x >> y;
 
-        vector<string> ma;
-
-        rp(i,0,(2*n-2)){
-            string a;
-            cin >> a;
-            if(a.length()==n/2){
-                ma.pb(a);
-            }
+        if(abs(x-y)==1){
+            cout << "2\n" << x << " " << y << "\n";
+            continue;
         }
-        
-        reverse(all(ma[0]));
 
-        ma[0]==ma[1] ? cout <<"YES\n":cout <<"NO\n";
+        deq ans;
+        int start = x-1;
+
+        ans.pb(start);
+        ans.pb(x);
+        int z = start;
+
+        while(z>=y){
+            ans.pb(z);
+            --z;
+        }
+
+        z = y+1;
+
+        while(z<start){
+            ans.pb(z);
+            ++z;
+        }
+
+        cout << ans.size() << "\n";
+
+        for(auto i : ans){
+            cout << i << " ";
+        }
+        cout << "\n";
     }
 
     return 0;}

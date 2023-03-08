@@ -1,6 +1,6 @@
 #include<bits/stdc++.h>
 #define rp(i,a,n) for(int i=a;i<n;i++)
-#define rep(i,a,n) for(int i=a;i<=n;i++)
+#define rep(i,a,n) for(int i=a;i>=n;i--)
 #define ll long long
 #define int long long
 #define deq vector<ll>
@@ -36,40 +36,7 @@ signed main(){
 
     while(t--){
 
-        int n;
-        cin >> n;
-
-        int arr[n];
-
-        rp(i,0,n){
-            cin >> arr[i];
-        }
-
-        int num = 0;
-
-        rp(i,0,n){
-            if(arr[i]<0)num++;
-        }
-
-        int ans = 0;
-
-        if(num%2==0){
-            rp(i,0,n){
-                ans+=abs(arr[i]);
-            }
-        }
-        else{
-            int mini = 0;
-            rp(i,0,n){
-                if(abs(arr[mini])>abs(arr[i])){
-                    mini = i;
-                }
-                ans+=abs(arr[i]);
-            }
-            ans-=abs(2*arr[mini]);
-        }
-
-        cout << ans << "\n";
+        
 
     }
 

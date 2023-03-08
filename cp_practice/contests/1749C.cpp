@@ -1,81 +1,76 @@
-//							  ੴ  ਵਾਹਿਗੁਰੂ
-
-#include <bits/stdc++.h>
-#define rp(i, a, n) for (int i = a; i < n; i++)
-#define rep(i, a, n) for (int i = a; i <= n; i++)
+#include<bits/stdc++.h>
+#define rp(i,a,n) for(int i=a;i<n;i++)
+#define rep(i,a,n) for(int i=a;i>=n;i--)
 #define ll long long
 #define int long long
-#define deq deque<ll>
-#define mii map<ll, ll>
-#define pii pair<ll, ll>
+#define deq vector<ll>
+#define mii map<ll,ll>
+#define pii pair<ll,ll>
 #define pb push_back
 #define f first
 #define s second
 #define sz(a) (int)a.size()
 #define all(x) (x).begin(), (x).end()
-#define lb(a, b) lower_bound((a).begin(), (a).end(), c)
+#define lb(a,b) lower_bound((a).begin(),(a).end(),b)
 const ll M = 1000000007;
 using namespace std;
 
-signed main()
-{
+int power(int a, int b, int mod){
+    int ans = 1;
+    while (b > 0){
+        if (b & 1){ans = (ans%mod * 1LL * a%mod) % mod;}
+        a = (a%mod * 1LL * a%mod) % mod;
+        b >>= 1;}
+    return ans%mod;}
+
+ll modInverse(ll n,ll mod){
+    return power(n,mod-2,mod)%mod;}
+
+signed main(){
     ios_base::sync_with_stdio(0);
-    cin.tie(0);
-    cout.tie(0);
+    cin.tie(0);cout.tie(0);
     cout << fixed << setprecision(20);
 
-    int t;
+    int t = 1;
     cin >> t;
 
-    while (t--)
-    {
+    while(t--){
 
         int n;
         cin >> n;
 
-        int cnt = 0;
-        int a[n];
-        set<int> ele;
+        mii cnt;
 
-        rp(i, 0, n)
-        {
-            cin >> a[i];
-            ele.insert(a[i]);
-            if (a[i] == 1)
-                cnt++;
+        rp(i,0,n){
+            int a;
+            cin >> a;
+            cnt[a]++;
         }
 
-        ll ans = 0;
-        sort(a, a + n);
-        for (int k = 1; k <= n; k++)
-        {
-            deq d;
-            bool possible = true;
-            int start = 0;
-            int end = upper_bound(a, a + n, k) - a - 1;
-            for (int i = 1; i <= k; i++)
-            {
-                if (start > end)
-                {
-                    possible = false;
-                    break;
-                }
-                auto x = upper_bound(a + start, a + end + 1, k - i + 1) - a - 1;
-                if (x < 0 || x < start)
-                {
-                    possible = false;
-                    break;
-                }
-                end = x - 1;
-                start++;
+        int ans = cnt[1];
+
+        if(ans==0){
+            cout << "0\n";
+            continue;
+        }
+
+        int stock = 0;
+
+        rp(i,2,n+1){
+            if(i>ans)break;
+            if(cnt[i]>0){
+                stock+=(cnt[i]-1);
             }
-            if (possible)
-            {
-                ans = max(ans, k);
+            else if(cnt[i]==0 && stock>0){
+                stock--;
+            }
+            else if(cnt[i]==0 && stock==0){
+                ans--;
             }
         }
+
         cout << ans << "\n";
+
     }
 
-    return 0;
-}
+    return 0;}

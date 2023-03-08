@@ -39,19 +39,52 @@ signed main(){
         int n;
         cin >> n;
 
-        vector<string> ma;
+        int x = (n*(n+1))/2;
 
-        rp(i,0,(2*n-2)){
-            string a;
-            cin >> a;
-            if(a.length()==n/2){
-                ma.pb(a);
-            }
+        int arr[n+1];
+        arr[0] = 0;
+
+        int sum = 0;
+
+        for(int i = 1; i <= n; i++){
+            cin >> arr[i];
+            sum += arr[i];
         }
-        
-        reverse(all(ma[0]));
 
-        ma[0]==ma[1] ? cout <<"YES\n":cout <<"NO\n";
+        if(sum%x!=0){
+            cout << "NO\n";
+            continue;
+        }
+
+        int y = sum / x;
+
+        int ans[n+1];
+        ans[1] = y;
+        bool check = true;
+        for(int i = 2; i <= n; i++){
+            if(!check)continue;
+            int sum1 = arr[i] - arr[i-1];
+            int z = y - sum1;
+            if(z<=0 || z%n!=0){
+                check = false;
+                continue;
+            }
+            ans[i] = z/n;
+            ans[1]-= ans[i];
+        }
+
+        if(!check || ans[1]<=0){
+            cout << "NO\n";
+            continue;
+        }
+
+        cout << "YES\n";
+        rp(i,1,n+1){
+            cout  << ans[i] << " ";
+        }
+
+        cout << "\n";
+
     }
 
     return 0;}

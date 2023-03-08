@@ -36,22 +36,45 @@ signed main(){
 
     while(t--){
 
-        int n;
-        cin >> n;
+        int n,k;
+        cin >> n >> k;
 
-        vector<string> ma;
+        string a,b;
+        cin >> a >> b;
 
-        rp(i,0,(2*n-2)){
-            string a;
-            cin >> a;
-            if(a.length()==n/2){
-                ma.pb(a);
+        int cnt[26][2];
+
+        rp(i,0,26){
+            cnt[i][0] = cnt[i][1] = 0;
+        }
+
+        rp(i,0,n){
+            cnt[(int)(a[i]-'a')][0]++;
+            cnt[(int)(b[i]-'a')][1]++;
+        }
+
+        bool ans = true;
+
+        rp(i,0,26){
+            if(cnt[i][0]!=cnt[i][1]){
+                ans = false;
             }
         }
-        
-        reverse(all(ma[0]));
 
-        ma[0]==ma[1] ? cout <<"YES\n":cout <<"NO\n";
+        if(!ans){
+            cout << "NO\n";
+            continue;
+        }
+
+        for(int i = 0; i < n; i ++){
+            int z = max(i,n-i-1);
+            if(z<k && a[i]!=b[i]){
+                ans = false;
+            }
+        }
+
+        ans ? cout << "YES\n" : cout << "NO\n";
+
     }
 
     return 0;}

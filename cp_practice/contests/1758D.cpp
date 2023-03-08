@@ -39,19 +39,30 @@ signed main(){
         int n;
         cin >> n;
 
-        vector<string> ma;
+        int arr[n];
 
-        rp(i,0,(2*n-2)){
-            string a;
-            cin >> a;
-            if(a.length()==n/2){
-                ma.pb(a);
+        if(n&1){
+            arr[0] = (7*n+1)/2;
+            rp(i,1,n){
+                arr[i] = arr[i-1] + 1;
             }
+            arr[0]-=((n+1)/2);
+            arr[n-1]+=((n+1)/2);
         }
-        
-        reverse(all(ma[0]));
+        else{
+            arr[0] = 3*n + 1;
+            rp(i,1,n){
+                arr[i] = arr[i-1] + 2;
+            }
+            arr[0]--;
+            arr[n-1]++;
+        }
 
-        ma[0]==ma[1] ? cout <<"YES\n":cout <<"NO\n";
+        rp(i,0,n){
+            cout << arr[i] << " ";
+        }
+        cout << "\n";
+
     }
 
     return 0;}

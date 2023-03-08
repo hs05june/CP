@@ -12,8 +12,10 @@
 #define sz(a) (int)a.size()
 #define all(x) (x).begin(), (x).end()
 #define lb(a,b) lower_bound((a).begin(),(a).end(),b)
-const ll M = 1000000007;
+const ll M = 998244353;
 using namespace std;
+
+int factorial[300007];
 
 int power(int a, int b, int mod){
     int ans = 1;
@@ -32,26 +34,40 @@ signed main(){
     cout << fixed << setprecision(20);
 
     int t = 1;
-    cin >> t;
+    factorial[0] = factorial[1] = 1;
+
+    rp(i,2,300003){
+        factorial[i] = (i%M * factorial[i-1]%M)%M;
+    }
+    // cin >> t;
 
     while(t--){
 
         int n;
         cin >> n;
 
-        vector<string> ma;
+        int edge[n/3][3];
 
-        rp(i,0,(2*n-2)){
-            string a;
-            cin >> a;
-            if(a.length()==n/2){
-                ma.pb(a);
+        rp(i,0,n/3){
+            cin >> edge[i][0] >> edge[i][1] >> edge[i][2];
+            sort(edge[i],edge[i]+3);
+        }
+
+        int ans = 1;
+
+        rp(i,0,n/3){
+            if(edge[i][0] == edge[i][2]){
+                ans = (ans%M * 3%M)%M;
+            }
+            else if(edge[i][0]==edge[i][1]){
+                ans = (ans%M * 2%M)%M;
             }
         }
-        
-        reverse(all(ma[0]));
 
-        ma[0]==ma[1] ? cout <<"YES\n":cout <<"NO\n";
+        int x = factorial[n/3]%M, y = ((factorial[n/6]%M) * (factorial[n/6]%M))%M;
+        ans = (((ans%M * x%M)%M) * modInverse(y,M)%M)%M;
+        cout << (ans%M) << "\n";
+
     }
 
     return 0;}

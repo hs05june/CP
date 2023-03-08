@@ -1,6 +1,6 @@
 #include<bits/stdc++.h>
 #define rp(i,a,n) for(int i=a;i<n;i++)
-#define rep(i,a,n) for(int i=a;i>=n;i--)
+#define rep(i,a,n) for(int i=a;i<=n;i++)
 #define ll long long
 #define int long long
 #define deq vector<ll>
@@ -39,19 +39,33 @@ signed main(){
         int n;
         cin >> n;
 
-        vector<string> ma;
+        string a;
 
-        rp(i,0,(2*n-2)){
-            string a;
-            cin >> a;
-            if(a.length()==n/2){
-                ma.pb(a);
+        cin >> a;
+
+        bool ans = false;
+
+        int x = 0, y = 0;
+
+        rp(i,0,n){
+            if(a[i]=='L'){
+                x--;
             }
-        }
-        
-        reverse(all(ma[0]));
+            else if(a[i]=='R'){
+                x++;
+            }
+            else if(a[i]=='U'){
+                y++;
+            }
+            else if(a[i]=='D'){
+                y--;
+            }
+            if(x==1 && y ==1){
+                ans = true;
+            }
 
-        ma[0]==ma[1] ? cout <<"YES\n":cout <<"NO\n";
+        }
+        ans ? cout << "YES\n" : cout << "NO\n";
     }
 
-    return 0;}
+    return 0;}  

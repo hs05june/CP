@@ -32,26 +32,41 @@ signed main(){
     cout << fixed << setprecision(20);
 
     int t = 1;
-    cin >> t;
+    // cin >> t;
 
     while(t--){
 
         int n;
         cin >> n;
 
-        vector<string> ma;
+        string a;
+        cin >> a;
 
-        rp(i,0,(2*n-2)){
-            string a;
-            cin >> a;
-            if(a.length()==n/2){
-                ma.pb(a);
-            }
+        int cnt[2] = {0,0};
+
+        rp(i,0,n){
+            cnt[(a[i] == '+')]++;
         }
-        
-        reverse(all(ma[0]));
 
-        ma[0]==ma[1] ? cout <<"YES\n":cout <<"NO\n";
+        int y=abs(cnt[0]-cnt[1]);
+
+        int m;
+        cin >> m;
+
+        while(m--){
+            int a,b;
+            cin >> a >> b;
+            if(a<b){
+                swap(a,b);
+            }
+            if(a==b){
+                cnt[0]==cnt[1] ? cout << "YES\n" : cout << "NO\n";
+                continue;
+            }
+            int x = ((b*y)/(a-b));
+            ((((b*y)%(a-b))==0) && x<=min(cnt[0],cnt[1])) ? cout << "YES\n" : cout << "NO\n";
+        }
+
     }
 
     return 0;}

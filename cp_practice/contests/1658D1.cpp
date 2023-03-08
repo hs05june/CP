@@ -36,30 +36,58 @@ signed main(){
 
     while(t--){
 
-        int n;
-        cin >> n;
+        int l,r;
+        cin >> l >> r;
 
-        int arr[n];
+        int arr[r-l+1];
 
-        rp(i,0,n){
+        int maxi = 0;
+
+        set<int> ele;
+
+        rp(i,0,r-l+1){
             cin >> arr[i];
+            maxi = max(maxi,arr[i]);
+            ele.insert(arr[i]);
         }
 
-        rp(i,0,n){
-            if(arr[i]==1)arr[i]++;
+        if(maxi==r){
+            cout << "0\n";
+            continue;
         }
-        rp(i,1,n){
-            if(arr[i]%arr[i-1]==0){
-                arr[i]++;
+
+        mii need,present;
+
+        for(int i = l; i<=r; i++){
+            int k = 0;
+            while((1<<k)<=i){
+                if(((1<<k)&i)!=0){
+                    need[k]++;
+                }
+                ++k;
             }
         }
 
-        rp(i,0,n){
-            cout << arr[i] <<" ";
+        for(int i =0; i <r-l+1; i++){
+            int k = 0;
+            while((1<<k)<=arr[i]){
+                if(((1<<k)&arr[i])!=0){
+                    present[k]++;
+                }
+                ++k;
+            }
         }
 
-        cout << "\n";
+        int ans = 0;
 
+        for(int i = 0; i<=17;i++){
+            int x = (1<<i);
+            if(need[i]!=present[i]){
+                ans|=x;
+            }
+        }
+
+        cout << ans << "\n";
     }
 
     return 0;}

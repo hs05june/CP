@@ -53,15 +53,57 @@ Output 2:
 
 #include<bits/stdc++.h>
 #define ll long long
-#define deq deque<int>
+#define deq vector<int>
 ll mod = 1000000007;
 using namespace std;
+
+bool solve(int a, int c[], int n, int maxi){
+    int z = 0;
+    for(int i = 1; i <= n; i++){
+        int sum = 0;
+        while(i<=n && (sum + c[i]) <= maxi){
+            sum += c[i];
+            ++i;
+        }
+        ++z;
+        --i;
+    }
+
+    return z<=a;
+}
 
 int main(){
     ios::sync_with_stdio(0);
     cin.tie(0);
     cout.tie(0);
 
-    
+    int n,a,b,low = 0,high = 0;
+
+    cin >> n >> a >> b;
+
+    int c[n+1];
+
+    for(int i=1;i<n+1;i++){
+        cin >> c[i];
+        low = max(low,c[i]);
+        high += c[i];
+    }
+
+    while(high-low>1){
+        int mid = (low+high)/2;
+        if(solve(a,c,n,mid)){
+            high = mid;
+        }
+        else{
+            low = mid + 1;
+        }
+    }
+
+    if(solve(a,c,n,low)){
+        cout << b*low << "\n";
+    }
+    else{
+        cout << b*high << "\n";
+    }
 
     return 0;}

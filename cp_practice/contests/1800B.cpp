@@ -36,22 +36,32 @@ signed main(){
 
     while(t--){
 
-        int n;
-        cin >> n;
+        int n,k;
+        cin >> n >> k;
 
-        vector<string> ma;
+        string a;
+        cin >> a;
 
-        rp(i,0,(2*n-2)){
-            string a;
-            cin >> a;
-            if(a.length()==n/2){
-                ma.pb(a);
-            }
+        int ans = 0;
+
+        map<char,int> cnt;
+
+        rp(i,0,n){
+            cnt[a[i]]++;
         }
-        
-        reverse(all(ma[0]));
 
-        ma[0]==ma[1] ? cout <<"YES\n":cout <<"NO\n";
+        rp(i,0,26){
+            int x = min(cnt[char('a'+i)],cnt[char('A'+i)]);
+            cnt[char('a'+i)] -= x;
+            cnt[char('A'+i)] -= x;
+            ans+=x;
+            int y = max(min(k,cnt[char('a'+i)]/2),min(k,cnt[char('A'+i)]/2));
+            ans+=y;
+            k-=y;
+        }
+
+        cout << ans << "\n";
+
     }
 
     return 0;}

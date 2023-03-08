@@ -15,16 +15,25 @@
 const ll M = 1000000007;
 using namespace std;
 
-int power(int a, int b, int mod){
-    int ans = 1;
-    while (b > 0){
-        if (b & 1){ans = (ans%mod * 1LL * a%mod) % mod;}
-        a = (a%mod * 1LL * a%mod) % mod;
-        b >>= 1;}
-    return ans%mod;}
+int n,l,k;
+int dp[505][505],d[505],a[505];
 
-ll modInverse(ll n,ll mod){
-    return power(n,mod-2,mod)%mod;}
+int solve(int index, int left){
+    if(index>n+1)return 0;
+
+    if(dp[index][left]!=-1){
+        return dp[index][left];
+    }
+
+    int ans = LLONG_MAX;
+    
+    for(int i = 1; i<=(n+1-index);i++){
+        if(i-1>left)break;
+        ans = min(ans,a[index]*(d[index+i]-d[index])+solve(index+i,left-i+1));
+    }
+
+    return dp[index][left]=ans;
+}
 
 signed main(){
     ios_base::sync_with_stdio(0);
@@ -32,26 +41,24 @@ signed main(){
     cout << fixed << setprecision(20);
 
     int t = 1;
-    cin >> t;
 
     while(t--){
 
-        int n;
-        cin >> n;
+        cin >> n >> l >> k;
 
-        vector<string> ma;
+        rp(i,1,n+1)cin >> d[i];
+        rp(i,1,n+1)cin >> a[i];
 
-        rp(i,0,(2*n-2)){
-            string a;
-            cin >> a;
-            if(a.length()==n/2){
-                ma.pb(a);
+        d[n+1] = l;
+
+        rp(i,0,n+1){
+            rp(j,0,k+1){
+                dp[i][j] = -1;
             }
         }
-        
-        reverse(all(ma[0]));
 
-        ma[0]==ma[1] ? cout <<"YES\n":cout <<"NO\n";
+        cout << solve(1,k) << "\n";
+
     }
 
     return 0;}

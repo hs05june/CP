@@ -39,19 +39,42 @@ signed main(){
         int n;
         cin >> n;
 
-        vector<string> ma;
+        int ans[n+1];
 
-        rp(i,0,(2*n-2)){
-            string a;
-            cin >> a;
-            if(a.length()==n/2){
-                ma.pb(a);
+        ans[0] = 0;
+        set<int> done;
+
+        for(int i = 1; i <= n ; i ++){
+            if(done.count(i))continue;
+            cout << "? " << i << endl;
+            int x,y;
+            deq check;
+            cin >> y;
+            // done.insert(x);
+            // check.pb(x);
+            x = 0;
+            while(x!=y){
+                cout << "? " << i << endl;
+                cin >> x;
+                done.insert(x);
+                check.pb(x);
             }
-        }
-        
-        reverse(all(ma[0]));
 
-        ma[0]==ma[1] ? cout <<"YES\n":cout <<"NO\n";
+            ans[check[sz(check)-1]] = check[0];
+            // for(auto j : check){
+            //     cout << j << " ";
+            // }
+            // cout << endl;
+            for(int j = 1; j < check.size();j++){
+                ans[check[j-1]] = check[j];
+            }
+
+        }
+        cout << "! ";
+        for(auto i = 1; i<=n;i++){
+            cout << ans[i] << " ";
+        }
+        cout << endl;
     }
 
     return 0;}

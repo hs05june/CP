@@ -12,7 +12,7 @@
 #define sz(a) (int)a.size()
 #define all(x) (x).begin(), (x).end()
 #define lb(a, b) lower_bound((a).begin(), (a).end(), b)
-const ll M = 1000000007;
+const ll M = 998244353;
 using namespace std;
 
 int power(int a, int b, int mod)
@@ -30,11 +30,6 @@ int power(int a, int b, int mod)
     return ans % mod;
 }
 
-ll modInverse(ll n, ll mod)
-{
-    return power(n, mod - 2, mod) % mod;
-}
-
 signed main()
 {
     ios_base::sync_with_stdio(0);
@@ -48,41 +43,32 @@ signed main()
     while (t--)
     {
 
-        int n;
-        cin >> n;
-        string a;
-        cin >> a;
-        string b = "H";
+        int l, r;
+        cin >> l >> r;
 
-        for (auto i : a)
+        int ans = 0, x = l;
+
+        while ((x) <= r)
         {
-            b.pb(i);
+            ans++;
+            x *= 2;
         }
 
-        bool done[n + 1];
+        int factor = power(2, ans - 1, M);
+        int ans1 = 0;
+        ans1 += ((r / factor) - l + 1);
 
-        rp(i, 0, n + 1)
+        if (factor >= 2)
         {
-            done[i] = false;
-        }
-
-        int cost = 0;
-
-        rp(i, 1, n + 1)
-        {
-            for (int j = i; j <= n; j += i)
+            int z = (factor / 2) * 3;
+            int y = r / z;
+            if (y >= l)
             {
-                if (b[j] == '1')
-                    break;
-                if (b[j] == '0' && done[j] == false)
-                {
-                    done[j] = true;
-                    cost += i;
-                }
+                ans1 = ((ans1 % M) + (((y - l + 1) % M) * ((ans - 1) % M)) % M) % M;
             }
         }
 
-        cout << cost << "\n";
+        cout << ans << " " << (ans1 % M) << "\n";
     }
 
     return 0;

@@ -39,19 +39,40 @@ signed main(){
         int n;
         cin >> n;
 
-        vector<string> ma;
+        string a;
+        cin >> a;
 
-        rp(i,0,(2*n-2)){
-            string a;
-            cin >> a;
-            if(a.length()==n/2){
-                ma.pb(a);
+        int x = -1;
+
+        rp(i,n/2,n){
+            if(a[i]=='0'){
+                x = i;
+                break;
             }
         }
-        
-        reverse(all(ma[0]));
 
-        ma[0]==ma[1] ? cout <<"YES\n":cout <<"NO\n";
+        if(x!=-1){
+            cout << 1 << " " << x+1 << " " << 1 << " " << x << "\n";
+            continue;
+        }
+
+        x = -1;
+
+        rp(i,0,n/2){
+            if(a[i]=='0'){
+                x = i;
+                break;
+            }
+        }
+
+        if(x!=-1){
+            cout << x+1 << " " << n << " " << x+2 << " " << n << "\n";
+            continue;
+        }
+
+        cout << 2 << " " << n/2+1 << " " << 1 << " " << n/2 << "\n";
+
+
     }
 
     return 0;}
