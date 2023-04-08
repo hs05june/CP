@@ -36,7 +36,58 @@ signed main(){
 
     while(t--){
 
-        
+        int n,k;
+        cin >> n >> k;
+
+        string a[n],b[n];
+        rp(i,0,n)cin >> a[i];
+        rp(i,0,n)cin >> b[i];
+
+        int cnta[26], cntb[26];
+        int lena[20],lenb[20];
+
+        rp(i,0,26){
+            cnta[i] = cntb[i] = 0;
+        }
+
+        // rp(i,0,20){
+        //     lena[i] = lenb[i] = 0;
+        // }
+
+        bool check = true;
+        rp(i,0,n){
+            // lena[sz(a[i])]++;
+            // lenb[sz(b[i])]++;
+            if(sz(a[i])!=sz(b[i])){
+                check = false;
+            }
+            for(auto j : a[i]){
+                cnta[(int)(j-'0')]++;
+            }
+            for(auto j : b[i]){
+                cntb[(int)(j-'0')]++;
+            }
+        }
+
+
+        // rp(i,0,20){
+        //     if(lena[i]!=lenb[i])check = false;
+        // }
+
+        if(!check){
+            cout << "NO\n";
+            continue;
+        }
+
+        int cost = 0;
+
+        rp(i,0,26){
+            cost+=abs(cnta[i]-cntb[i]);
+        }
+
+        cost/=2;
+
+        cost<=k ? cout << "YES\n" : cout << "NO\n";
 
     }
 

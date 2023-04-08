@@ -32,12 +32,31 @@ signed main(){
     cout << fixed << setprecision(20);
 
     int t = 1;
-    cin >> t;
+    // cin >> t;
 
     while(t--){
-
+        int i = 2;
+        while(true){
+            int x,y;
+            cout << "? 1 " << i << endl;
+            cin >> x;
+            if(x==-1){
+                cout << "! " << i-1 << endl;
+                break;
+            }
+            cout << "? " << i << " 1" << endl;
+            if(y==-1){
+                cout << "! " << i-1 << endl;
+                break;
+            }
+            cin >> y;
+            if(x!=y){
+                cout << "! " << x+y << endl;
+                break;
+            }
+            ++i;
+        }
         
-
     }
 
     return 0;}

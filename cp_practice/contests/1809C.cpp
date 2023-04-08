@@ -34,9 +34,46 @@ signed main(){
     int t = 1;
     cin >> t;
 
+    deq parts;
+    parts.pb(0);
+
+    rp(i,1,32){
+        parts.pb(((i*(i+1))/2));
+    }
+
+    // cout << sz(parts);
+
     while(t--){
 
+        int n,k;
+        cin >> n >> k;
+
+        int z;
+
+        rp(i,0,31){
+            if(parts[i+1]>k){z = i;break;}
+        }
         
+        deq ans;
+        int x = k - parts[z];
+
+        rp(i,0,z){
+            ans.pb(2);
+        }
+
+        int sum = 2*z;
+
+        if(x>0)ans.pb((-sum + 2*(x-1)+1));
+
+        while(sz(ans)<n){
+            ans.pb(-1000);
+        }
+
+        for(auto i : ans){
+            cout << i << " ";
+        }
+
+        cout << "\n";
 
     }
 

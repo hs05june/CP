@@ -36,8 +36,27 @@ signed main(){
 
     while(t--){
 
-        
+        int n,c,d;
+        cin >> n >> c >> d;
 
+        set<int> uniq;
+
+        rp(i,0,n){
+            int x;
+            cin >> x;
+            uniq.insert(x);
+        }
+
+        int ans1 = c*(n - sz(uniq));
+
+        int total = sz(uniq),x = 1;
+        int ans = d + c*total;
+        for(auto i : uniq){
+            int cost = (i-x)*d + (total-x)*c;
+            ans = min(cost,ans);
+            ++x;
+        }
+        cout << (ans + ans1) << "\n";
     }
 
     return 0;}

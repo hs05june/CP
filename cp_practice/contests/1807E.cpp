@@ -36,7 +36,45 @@ signed main(){
 
     while(t--){
 
-        
+        int n;
+        cin >> n;
+
+        int arr[n+1];
+
+        arr[0] = 0;
+
+        rp(i,1,n+1){
+            cin >> arr[i];
+        }
+
+        int preffix[n+1] = {0};
+        preffix[0] = 0;
+
+        rp(i,1,n+1){
+            preffix[i] = preffix[i-1] + arr[i];
+        }
+
+        int low = 1, high = n;
+
+        while(high - low > 0){
+            int mid = (low+high)/2;
+            cout << "? " << mid - low + 1 << " ";
+            rp(i,low,mid+1){
+                cout << i << " ";
+            }
+            cout << endl;
+            int x;
+            cin >> x;
+
+            if(preffix[mid]-preffix[low-1] < x ){
+                high = mid;
+            }
+            else{
+                low = mid+1;
+            }
+        }
+
+        cout << "! " << low << endl;
 
     }
 

@@ -36,7 +36,16 @@ signed main(){
 
     while(t--){
 
-        
+        int n,m;
+        cin >> n >> m;
+
+        int maxi = min(n,m+1);
+
+        int ans = 1;
+
+        for(int i = 1; i <= maxi; i++){
+            
+        }
 
     }
 

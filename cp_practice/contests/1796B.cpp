@@ -36,7 +36,40 @@ signed main(){
 
     while(t--){
 
-        
+        string a,b;
+        cin >> a >> b;
+
+        if(a[a.length()-1] == b[b.length()-1]){
+            cout << "YES\n";
+            cout << "*" << a[a.length()-1] << "\n";
+            continue;
+        }
+
+        if(a[0]==b[0]){
+            cout << "YES\n";
+            cout << a[0] << "*\n";
+            continue;
+        }
+
+        bool check = false;
+        int x,y;
+        rp(i,0,a.length()-1){
+            if(check)break;
+            rp(j,0,b.length()-1){
+                if(a[i]==b[j] && a[i+1]==b[j+1]){
+                    check = true;
+                    x = j; y = j+1;
+                    break;
+                }
+            }
+        }
+
+        if(check){
+            cout << "YES\n";
+            cout << "*" << b[x] << b[y] << "*\n";
+            continue;
+        }
+        cout << "NO\n";
 
     }
 

@@ -36,8 +36,25 @@ signed main(){
 
     while(t--){
 
-        
+        int n;
+        cin >> n;
 
+        int x = 0;
+        int arr[n];
+        rp(i,0,n){
+            cin >> arr[i];
+            x ^= arr[i];
+        }
+
+        if(n%2==0 && x!=0){
+            cout << "-1\n";
+            continue;
+        }
+        if(n%2==0 && x==0){
+            cout << "0\n";
+            continue;
+        }
+        cout << x << "\n";
     }
 
     return 0;}

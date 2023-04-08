@@ -36,8 +36,26 @@ signed main(){
 
     while(t--){
 
-        
+        int n;
+        cin >> n;
 
+        string a;
+        cin >> a;
+
+        char x = 'a';
+        int ans = 0, ans1 = 0;
+        for(int i = 0; i < n; i+=2){
+            if(a[i]!=a[i+1]){
+                ans++;
+            }
+            else{
+            if(a[i]!=x){
+                ans1++;
+                x = a[i];
+                }
+            }
+        }
+        cout << ans << " " << max(ans1,1LL) << "\n";
     }
 
     return 0;}

@@ -36,8 +36,22 @@ signed main(){
 
     while(t--){
 
-        
+        int n;
+        cin >> n;
+        string a = "FBFFBFFB";
+        string b;
+        cin >> b;
+        bool ans = false;
 
+        rp(i,0,8){
+            int k = i;
+            rp(j,0,n){
+                if(a[k]!=b[j])break;
+                if(j==(n-1))ans = true;
+                k = (k+1)%8;
+            }
+        }
+        ans ? cout << "YES\n" : cout << "NO\n";
     }
 
     return 0;}

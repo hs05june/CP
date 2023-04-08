@@ -36,22 +36,16 @@ signed main(){
 
     while(t--){
 
-        int n;
-        cin >> n;
+        int n,k;
+        cin >> n >> k;
 
-        vector<string> ma;
+        int low = 0, high = n;
 
-        rp(i,0,(2*n-2)){
-            string a;
-            cin >> a;
-            if(a.length()==n/2){
-                ma.pb(a);
-            }
+        while(high-low>1){
+            int mid = (low+high)/2;
+            if( )
         }
-        
-        reverse(all(ma[0]));
 
-        ma[0]==ma[1] ? cout <<"YES\n":cout <<"NO\n";
     }
 
     return 0;}
