@@ -16,6 +16,7 @@ using namespace std;
 
 int parent[100];
 int size[100];
+int rank[100];
 
 void make(int v){
     parent[v] = v; // Since, abhi kisi bhi group mein nhi h OR single membered group jiska root vo khud hai
@@ -34,11 +35,16 @@ int find(int v){
 
 void Union(int a,int b){
     int x = find(a), y = find(b);
-    if(size[x]>size[y])
+    // if(size[x]>size[y])
+    //     swap(x,y);
+    //     parent[x] = y;
+    //     size[y] += size[x];                // Union By Size (Barre mein chhote ko daalo)
+
+    if(rank[x]>rank[y]){
         swap(x,y);
-        
-        parent[x] = y;
-        size[y] += size[x];                // Union By Size (Barre mein chhote ko daalo)
+    }
+    parent[x] = y;
+    if(rank[x]==rank[y])rank[y]++;          // Union By Rank (Barre height waale mein chhote height waale ko daalo)
 }
 
 int main(){
@@ -69,6 +75,6 @@ int main(){
         roots.insert(find(i));
     }
 
-    cout<<"Number of Connected Components: "<<roots.size()<<endl;
+    cout<<"Number of Connected Components: "<< roots.size()<<endl;
 
     return 0;}

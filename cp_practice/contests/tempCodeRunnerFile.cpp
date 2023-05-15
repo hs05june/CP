@@ -1,0 +1,1 @@
+cnt[i/x]*cnt[i]*cnt[i*x]

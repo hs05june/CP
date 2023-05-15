@@ -25,37 +25,28 @@ signed main()
     int n;
     cin >> n;
 
-    deq a(n);
-    mii cnt,ans;
-    set ele;
+    int arr[n],sum = 0;
 
-    rp(i, 0, n)
-    {
-        cin >> a[i];
-        // ele.insert(ele);
-        ans[a[i]]=a[i];
-        cnt[a[i]]++;
-    }
+    rp(i,0,n){cin >> arr[i];sum+=arr[i];}
 
-    sort(all(a));
+    sort(arr,arr+n);
 
-    int x = 2;
-    if(!cnt.count(1)){
+    if(arr[0]!=1){
         cout << "1\n";
         return 0;
     }
 
-    ans[1] = 1;
-    while (true)
-    {
-        int z = x;
-        if(!cnt.count(x)){
-            ans[x] = ans[x-1];
-            ans
-        }
-        ++x;
-    }
+    int maxi = 1;
     
+    rp(i,1,n){
+        if(arr[i] > 1 + maxi){
+            cout << 1+maxi << "\n";
+            return 0;
+        }
+        maxi+=arr[i];
+    }
+
+    cout << sum+1 << "\n";
 
     return 0;
 }

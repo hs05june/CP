@@ -1,167 +1,143 @@
-#include<bits/stdc++.h>
-#define rp(i,a,n) for(int i=a;i<n;i++)
-#define rep(i,a,n) for(int i=a;i>=n;i--)
+/*4. Median of Two Sorted Arrays
+Given two sorted arrays nums1 and nums2 of size m and n respectively, return the median of the two sorted arrays.
+
+The overall run time complexity should be O(log (m+n)).
+
+Example 1:
+Input: nums1 = [1,3], nums2 = [2]
+Output: 2.00000
+Explanation: merged array = [1,2,3] and median is 2.
+
+Example 2:
+Input: nums1 = [1,2], nums2 = [3,4]
+Output: 2.50000
+Explanation: merged array = [1,2,3,4] and median is (2 + 3) / 2 = 2.5.
+
+Constraints:
+nums1.length == m
+nums2.length == n
+0 <= m <= 1000
+0 <= n <= 1000
+1 <= m + n <= 2000
+-10^6 <= nums1[i], nums2[i] <= 10^6
+*/
+
+#include <bits/stdc++.h>
+#define rp(i, a, n) for (int i = a; i < n; i++)
+#define rep(i, a, n) for (int i = a; i >= n; i--)
 #define ll long long
 #define int long long
 #define deq vector<ll>
-#define mii map<ll,ll>
-#define pii pair<ll,ll>
+#define mii map<ll, ll>
+#define pii pair<ll, ll>
 #define pb push_back
 #define f first
 #define s second
 #define sz(a) (int)a.size()
 #define all(x) (x).begin(), (x).end()
-#define lb(a,b) lower_bound((a).begin(),(a).end(),b)
+#define lb(a, b) lower_bound((a).begin(), (a).end(), b)
 const ll M = 1000000007;
 using namespace std;
 
-double findMedianSortedArrays(vector<int>& nums1, vector<int>& nums2) {
-        int n = nums1.size(), m = nums2.size();
+double odd(vector<int> &nums)
+{
+    int n = nums.size();
+    return nums[n / 2];
+}
+double even(vector<int> &nums)
+{
+    int n = nums.size();
+    return (double(nums[n / 2 - 1]) + double(nums[n / 2])) / 2;
+}
 
-        if(n==0){
-            return m%2==1 ? nums2[m/2] : (double)(nums2[m/2]+nums2[m/2-1])/(double)2;
-        }
-        if(m==0){
-            return n%2==1 ? nums1[n/2] : (double)(nums1[n/2]+nums1[n/2-1])/(double)2;
-        }
-        
-        int low = 0, high = n;
-        int left = (n+m)%2==0 ? (n+m)/2 : (n+m)/2+1;
-        int ans = 0;
-        while(high-low>1){
-            int mid = (low+high)/2;
-            cout << mid << "\n";
-            int al,ar;
-            int right = left-mid;
-
-            if(mid+m<left){
-                low = mid+1;
-                continue;
-            }
-
-            int bl, br;
-
-            if(mid==0){
-                al = -1000009;
-                ar = nums1[mid];
-            }
-            else if(mid==n){
-                al = nums1[mid-1];
-                ar = 1000009;
-            }
-            else{
-                al = nums1[mid-1];
-                ar = nums1[mid];
-            }
-            if(right==0){
-                bl = -1000009;
-                br = nums2[right];
-            }
-            else if(right==m){
-                bl = nums2[right-1];
-                br = 1000009;
-            }
-            else{
-                br = nums2[right];
-                bl = nums2[right-1];
-            }
-
-            if(al>br){
-                high = mid-1;
-            }
-            else{
-                low = mid;
-            }
-        }
-
-
-
-            int al,ar,bl,br;
-            int right = left-low;
-            if(low==0){
-                al = -1000009;
-                ar = nums1[low];
-            }
-            else if(low==n){
-                al = nums1[low-1];
-                ar = 1000009;
-            }
-            else{
-                al = nums1[low-1];
-                ar = nums1[low];
-            }
-            if(right==0){
-                bl = -1000009;
-                br = nums2[right];
-            }
-            else if(right==m){
-                bl = nums2[right-1];
-                br = 1000009;
-            }
-            else{
-                br = nums2[right];
-                bl = nums2[right-1];
-            }
-            // cout << low << " " << high << " " << ans << "\n";
-        if(al<=br && bl<=ar){    
-        return (n+m)%2==1 ? max(al,bl) : (double)(max(al,bl)+min(ar,br))/(double)2;}
-
-        right = left-high;
-            if(high==0){
-                al = -1000009;
-                ar = nums1[high];
-            }
-            else if(high==n){
-                al = nums1[high-1];
-                ar = 1000009;
-            }
-            else{
-                al = nums1[high-1];
-                ar = nums1[high];
-            }
-            if(right==0){
-                bl = -1000009;
-                br = nums2[right];
-            }
-            else if(right==m){
-                bl = nums2[right-1];
-                br = 1000009;
-            }
-            else{
-                br = nums2[right];
-                bl = nums2[right-1];
-            }
-        return (n+m)%2==1 ? max(al,bl) : (double)(max(al,bl)+min(ar,br))/(double)2;
-        // return ans;
-    }
-
-signed main(){
+signed main()
+{
     ios_base::sync_with_stdio(0);
-    cin.tie(0);cout.tie(0);
+    cin.tie(0);
+    cout.tie(0);
     cout << fixed << setprecision(20);
 
-    int t = 1;
-    cin >> t;
+    int n, m;
+    cin >> n >> m;
+    deq num1, num2;
 
-    while(t--){
+    num1.push_back(INT_MIN);
+    num2.push_back(INT_MIN);
+    rp(i, 0, n)
+    {
+        int x;
+        cin >> x;
+        num1.pb(x);
+    }
+    rp(i, 0, m)
+    {
+        int x;
+        cin >> x;
+        num2.pb(x);
+    }
+    num1.push_back(INT_MAX);
+    num2.push_back(INT_MAX);
 
-        int n,m;
-        cin >> n >> m;
-        vector<int> nums1,nums2;
-        rp(i,0,n){
-            int x;
-            cin >> x;
-            nums1.pb(x);
-        }
-
-        rp(i,0,m){
-            int x;
-            cin >> x;
-            nums2.pb(x);
-        }
-
-        cout << findMedianSortedArrays(nums1,nums2) << "\n";
-
+    if (n == 0)
+    {
+        (m & 1) ? cout << odd(num2) << "\n" : cout << even(num2) << "\n";
+        return 0;
+    }
+    if (m == 0)
+    {
+        (n & 1) ? cout << odd(num1) << "\n" : cout << even(num1) << "\n";
+        return 0;
     }
 
-    return 0;}
+    int right = (n + m) / 2;
+    int left = n + m - right;
+    int low = 0, high = left;
+
+    while (high - low > 0)
+    {
+        int mid = (low + high) / 2;
+        if (mid > n)
+        {
+            high = mid - 1;
+            continue;
+        }
+        if (left - mid > m)
+        {
+            low = mid + 1;
+            continue;
+        }
+
+        if (num1[mid] <= num2[left - mid + 1] && num2[left - mid] <= num1[mid + 1])
+        {
+            if (((n + m) & 1))
+            {
+                cout << max(num1[mid], num2[left - mid]) << "\n";
+                return 0;
+            }
+            else
+            {
+                cout << (double(max(num1[mid], num2[left - mid])) + double(min(num1[mid + 1], num2[left - mid + 1]))) / 2 << "\n";
+                return 0;
+            }
+        }
+        else if (num1[mid] > num2[left - mid + 1])
+        {
+            high = mid - 1;
+        }
+        else if (num2[left - mid] > num1[mid + 1])
+        {
+            low = mid + 1;
+        }
+    }
+
+    if (((n + m) & 1))
+    {
+        cout << max(num1[low], num2[left - low]) << "\n";
+    }
+    else
+    {
+        cout << (double(max(num1[low], num2[left - low])) + double(min(num1[low + 1], num2[left - low + 1]))) / 2 << "\n";
+    }
+
+    return 0;
+}
