@@ -15,70 +15,69 @@
 const ll M = 1000000007;
 using namespace std;
 
+
 signed main(){
     ios_base::sync_with_stdio(0);
     cin.tie(0);cout.tie(0);
     cout << fixed << setprecision(20);
 
-        int n,query;
-        cin >> n >> query;
+    int t = 1;
+    cin >> t;
 
-        int array[n];
+    while(t--){
 
-        rp(i,0,n)cin >> array[i];
+        int n;
+        cin >> n;
+
+        int a[n+1], b[n+1];
+
+        mii store[n+1];
+        set<int> store1[n+1];
+
+        map<pii,int> index;
         
-        int total = 0;
-        sort(array,array+n);
-
-        while(query--){
-            int k;
-            cin >> k;
-            int final[n];
-            int answer = LLONG_MAX;
-            rp(i,0,n)final[i] = array[i];
-            if(k<=n){
-                int x = k;
-                rp(i,0,n){
-                    answer = min(answer,final[i]+max(x,0LL));
-                    --x;
-                }
-            }
-            else{
-                int left = k - n;
-                if(left%2==0){
-                    int x = k;
-                    rp(i,0,n){
-                        final[i]+=x;
-                        x--;
-                    }
-                }
-                else{
-                    int x = k;
-                    rp(i,0,n-1){
-                        final[i]+=x;
-                        --x;
-                    }
-                    left++;}
-                    sort(final,final+n);
-                    int total = 0;
-                    rp(i,0,n)total+=(2*abs(final[i]-final[0]));
-                    if(left<=total){
-                        answer = final[0];
-                    }
-                    else{
-                        left-=total;
-                        left/=2;
-                        int y = ceil(((long double)left)/n);
-                        answer = final[0]-y;
-                    }
-                
-            }
-            cout << answer << " ";
-            
+        rp(i,1,n+1){
+            cin >> a[i];
         }
 
-        cout << "\n";
+        rp(i,1,n+1){
+            cin >> b[i];
+            store[a[i]][b[i]]++;
+            store1[a[i]].insert(b[i]);
+        }
 
-    
+        // for(auto i : store[3])cout << i.f << " " << i.s << "\n";
+
+        int ans = 0;
+        
+        rp(i,1,n+1){
+            rp(j,i,n+1){
+                // cout << i << " " << j << "\n";
+                if(i*j>2*n)break;
+                for(auto k : store1[i]){
+                    // if(i*j - k > n)break;
+                    // if(i*j - k <= 0)continue;
+                    int po = i*j - k;
+                    // cout << i << " " << j << " " << po << "\n";
+                    if(store[j].count(po)){
+                        index[{i,k}]+=store[j][po];
+                        if(i!=j || po!=k)index[{j,po}]+=store[i][k];
+                    }
+                }
+            }
+        }
+
+        for(auto i : index){
+            // cout << i.f.f << " " << i.f.s << " = " << i.s << "\n"; 
+            ans += i.s;
+        }
+
+        // rp(i,0,n){
+        //     ans+=index[{a[i],b[i]}];
+        // }
+
+        cout << ans << "\n";
+
+    }
 
     return 0;}

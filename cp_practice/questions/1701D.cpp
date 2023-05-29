@@ -39,48 +39,34 @@ signed main(){
         int n;
         cin >> n;
 
-        int a[n], b[n];
+        int arr[n+1];
+ 
+        rp(i,1,n+1)cin >> arr[i];
 
-        rp(i,0,n){
-            cin >> a[i];
+        map<int,set<pii>> poss;
+        
+        rp(i,1,n+1){
+            int x = (i / (arr[i] + 1)) + 1;
+            int y = arr[i] == 0 ? n : i / arr[i];
+            poss[x].insert({y,i});
         }
 
-        rp(i,0,n){
-            cin >> b[i];
-        }
-
-        mii maxia,maxib;
-
-        rp(i,0,n){
-            int x = a[i];
-            int y = 0;
-            while(i < n && a[i]==x){
-                ++y;
-                ++i;
+        int ans[n+1];
+        rp(i,0,n+1)ans[i] = 0;
+        set<pii> avail;
+        int k = 1;
+        rp(i,1,n+1){
+            while(k<=i){
+                for(auto h : poss[k])avail.insert(h);
+                ++k;
             }
-            maxia[x] = max(maxia[x],y);
-            --i;
+            auto x = *(avail.begin());
+            ans[x.s] = i;
+            avail.erase(avail.begin());
         }
 
-        rp(i,0,n){
-            int x = b[i];
-            int y = 0;
-            while(i < n && b[i]==x){
-                ++y;
-                ++i;
-            }
-            maxib[x] = max(maxib[x],y);
-            --i;
-        }
-
-        int ans = 0;
-
-        rp(i,1,2*n+1){
-            ans = max(ans,maxia[i]+maxib[i]);
-        }
-
-
-        cout << ans << "\n";
+        rp(i,1,n+1)cout << ans[i] << " ";
+        cout << "\n";
 
     }
 

@@ -28,30 +28,24 @@ signed main(){
         int n;
         cin >> n;
 
-        int peeche[n] = {0}, aage[n] = {0};
+        int arr[n+1];
+        arr[0] = 0;
+        rp(i,1,n+1)cin >> arr[i];
 
-        int arr[n];
-        rp(i,0,n)cin >> arr[i];
-        int total = 0;
+        int peeche[n+2],aage[n+2];
+        peeche[0] = peeche[n+1] = aage[0] = aage[n+1] = LLONG_MIN;
 
-        rp(i,0,n){
-            rp(j,i+1,n){
-                if(arr[j]<arr[i]){
-                    total++;
-                    peeche[j]++;
-                    aage[i]++;
-                }
-            }
+        rp(i,1,n+1){
+            peeche[i] = max(peeche[i-1],arr[i]+i);
         }
-
-        rp(i,0,n){
-            int x = total - peeche[i] - aage[i] + i;
-            int y = total - peeche[i] - aage[i] + n - i - 1;
-            cout << max(x,y) << " ";
+        rep(i,n,1){
+            aage[i] = max(aage[i+1],arr[i]-i);
         }
-        cout << "\n";
-
-
+        int ans = 0;
+        rp(i,2,n){
+            ans = max(ans,arr[i]+peeche[i-1]+aage[i+1]);
+        }
+        cout << ans << "\n";
     }
 
     return 0;}

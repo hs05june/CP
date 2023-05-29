@@ -25,32 +25,33 @@ signed main(){
 
     while(t--){
 
-        int n;
-        cin >> n;
+        int n,m;
+        cin >> n >> m;
 
-        int peeche[n] = {0}, aage[n] = {0};
+        int arr[n+1][m+1];        
 
-        int arr[n];
-        rp(i,0,n)cin >> arr[i];
-        int total = 0;
+        map<int,deq> cnt;
 
-        rp(i,0,n){
-            rp(j,i+1,n){
-                if(arr[j]<arr[i]){
-                    total++;
-                    peeche[j]++;
-                    aage[i]++;
-                }
+        rp(i,1,n+1){
+            int ans = 0;
+            rp(j,1,m+1){
+                cin >> arr[i][j];
+                ans += (j*arr[i][j]);
             }
+            cnt[ans].pb(i);
         }
 
-        rp(i,0,n){
-            int x = total - peeche[i] - aage[i] + i;
-            int y = total - peeche[i] - aage[i] + n - i - 1;
-            cout << max(x,y) << " ";
-        }
-        cout << "\n";
+        int index,a,b;
 
+        for(auto i : cnt){
+            if(sz(i.s)==1){
+                index = i.s.back();
+                a = i.f;
+            }
+            else b = i.f;
+        }
+
+        cout << index << " " << abs(a-b) << '\n';
 
     }
 

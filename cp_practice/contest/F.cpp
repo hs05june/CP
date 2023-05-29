@@ -1,95 +1,86 @@
 #include<bits/stdc++.h>
-#define rp(i,a,n) for(int i=a;i<n;i++)
-#define rep(i,a,n) for(int i=a;i>=n;i--)
-#define ll long long
-#define int long long
-#define deq vector<ll>
-#define mii map<ll,ll>
-#define pii pair<ll,ll>
-#define pb push_back
-#define f first
-#define s second
-#define sz(a) (int)a.size()
-#define all(x) (x).begin(), (x).end()
-#define lb(a,b) lower_bound((a).begin(),(a).end(),b)
-const ll M = 1000000007;
+#define sz 200005
+#define mod 1000000007
+#define l 20
+#define ll long long int
 using namespace std;
-
-signed main(){
-    ios_base::sync_with_stdio(0);
-    cin.tie(0);cout.tie(0);
-    cout << fixed << setprecision(20);
-
-        int n,query;
-        cin >> n >> query;
-
-        int array[n];
-
-        rp(i,0,n)cin >> array[i];
-        
-        // int total = 0;
-        sort(array,array+n);
-
-        int calc[n];
-        int mini[n];
-        // int total[n];
-        // total[0] = 0;
-        rp(i,0,n){
-            calc[i] = (array[i] - array[0] - i);
+int n,lev[sz],up[sz + 10][l + 10],tin[sz + 10],tout[sz + 10],tim; 
+vector<int>adj[sz + 10];
+void dfs(int v, int p) {
+    up[v][0] = p;
+    lev[v] = lev[p] + 1;
+    tin[v] = ++tim;
+    for(int i = 1; i <= l; ++i)
+        up[v][i] = up[up[v][i - 1]][i - 1];
+    for(int u : adj[v]) {
+        if (u != p)
+            dfs(u, v);
+    }
+    tout[v] = tim;
+    return;
+}
+bool is_ancestor(int u,int v) {
+    return tin[u] <= tin[v] && tout[u] >= tout[v];
+}
+int lca(int u, int v) {
+    if(is_ancestor(u,v))
+        return u;
+    if(is_ancestor(v,u))
+        return v;
+    if(lev[u]<lev[v])
+        swap(u,v);
+    for(int i = l;i >= 0; i--)
+        if(lev[up[u][i]] >= lev[v])
+            u = up[u][i];
+    for(int i = l;i >= 0; i--)
+        if(up[u][i] != up[v][i]) {
+            u = up[u][i];
+            v = up[v][i];
         }
-
-        mini[0] = calc[0];
-
-        rp(i,1,n){
-            mini[i] = min(mini[i-1],calc[i]);
+    if(u != v) {
+        u = up[u][0];
+        v = up[v][0];
+    }
+    return u;
+}
+int dis(int a, int b) {
+    int lc = lca(a, b);
+    return lev[a] - lev[lc] + lev[b] - lev[lc];
+}
+pair<int,int> kor(pair<int,int>a1, int b1) {
+    int ager = dis(a1.first, a1.second);
+    int a10 = dis(a1.first, b1);
+    int a11 = dis(a1.second, b1);
+    if(ager >= max(a11, a10)) return a1;
+    if(a10 >= max(ager, a11)) return {a1.first, b1};
+    return {a1.second, b1};
+}
+int main() {
+    ios_base::sync_with_stdio(false);cin.tie(NULL);
+    int t; cin >> t;
+    while(t--) {
+        tim = 0;
+        int n, q; cin >> n >> q;
+        for(int i = 2; i <= n; i++) {
+            int a, b; cin >> a >> b;
+            adj[a].push_back(b);
+            adj[b].push_back(a); 
+        } dfs(1, 0);
+        while(q--) {
+            int a; cin >> a;
+            vector<int>v(a);
+            for(int &u:v) cin >> u;
+            std::vector<int> v1;
+            int ans = 0;
+            if(a == 1) {
+                cout << "0\n";
+                continue;
+            } pair<int,int>dia = {v[0], v[1]};
+            for(int i = 2; i < a; i++) {
+                dia = kor(dia, v[i]);
+            } cout << (dis(dia.first, dia.second) + 1) / 2 << "\n";
+        } for(int i = 1; i <= n; i++) {
+            adj[i].clear();
         }
-
-        int total = 0;
-
-        rp(i,0,n){
-            total+=2*abs(calc[i]-mini[n-1]);
-        }
-
-        // rp(i,0,n){
-        //     cout << calc[i] << " " << mini[i] << "\n"; 
-        // }
-
-        while(query--){
-            int k;
-            cin >> k;
-            int answer = LLONG_MAX;
-            if(k<=n){
-                answer = (array[0] + k + mini[k-1]);
-                if(k!=n)answer = min(answer,array[k]);
-            }
-            else{
-                int left = k - n;
-                int z = n-1;
-                if(left%2==0){
-                    z=n-1;
-                }
-                else{
-                    z = n-2;
-                    left++;}
-                    int total = 0;
-                    rp(i,0,n)total+=(2*abs(final[i]-final[0]));
-                    if(left<=total){
-                        answer = final[0];
-                    }
-                    else{
-                        left-=total;
-                        left/=2;
-                        int y = ceil(((long double)left)/n);
-                        answer = final[0]-y;
-                    }
-                
-            }
-            cout << answer << " ";
-            
-        }
-
-        cout << "\n";
-
-    
-
-    return 0;}
+    }
+}

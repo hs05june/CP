@@ -15,6 +15,9 @@
 const ll M = 1000000007;
 using namespace std;
 
+deq graph[200007];
+int Size[200007];
+
 int power(int a, int b, int mod){
     int ans = 1;
     while (b > 0){
@@ -26,62 +29,46 @@ int power(int a, int b, int mod){
 ll modInverse(ll n,ll mod){
     return power(n,mod-2,mod)%mod;}
 
+int dfs(int n, int parent){
+    int ans = 1;
+    for(auto i : graph[n]){
+        if(i == parent)continue;
+        ans += dfs(i,n);
+    }
+    return Size[n] = ans;
+}
+
 signed main(){
     ios_base::sync_with_stdio(0);
     cin.tie(0);cout.tie(0);
     cout << fixed << setprecision(20);
 
-    int t = 1;
-    cin >> t;
+    int n, k;
+    cin >> n >> k;
 
-    while(t--){
-
-        int n;
-        cin >> n;
-
-        int a[n], b[n];
-
-        rp(i,0,n){
-            cin >> a[i];
-        }
-
-        rp(i,0,n){
-            cin >> b[i];
-        }
-
-        mii maxia,maxib;
-
-        rp(i,0,n){
-            int x = a[i];
-            int y = 0;
-            while(i < n && a[i]==x){
-                ++y;
-                ++i;
-            }
-            maxia[x] = max(maxia[x],y);
-            --i;
-        }
-
-        rp(i,0,n){
-            int x = b[i];
-            int y = 0;
-            while(i < n && b[i]==x){
-                ++y;
-                ++i;
-            }
-            maxib[x] = max(maxib[x],y);
-            --i;
-        }
-
-        int ans = 0;
-
-        rp(i,1,2*n+1){
-            ans = max(ans,maxia[i]+maxib[i]);
-        }
-
-
-        cout << ans << "\n";
-
+    rp(i,1,n){
+        int a,b;
+        cin >> a >> b;
+        graph[a].pb(b);
+        graph[b].pb(a);
     }
+
+    if(k & 1){
+        cout << "1\n";
+        return 0;
+    }
+
+    int x = dfs(1,0);
+
+    int ans = 0;
+
+    rp(i,1,n+1){
+        ans = ans%M + (((Size[i])%M*(n-Size[i])%M)%M)%M;
+    }
+
+    ans = (ans%M * modInverse(((n%M*(n-1)%M)%M * modInverse(2,M)%M)%M,M)%M)%M;
+
+    cout << (1%M + ans%M)%M << "\n";
+
 
     return 0;}

@@ -36,49 +36,39 @@ signed main(){
 
     while(t--){
 
-        int n;
-        cin >> n;
+        int a1,d1,n1;
+        int a2,d2,n2;
+        cin >> a1 >> d1 >> n1;
+        cin >> a2 >> d2 >> n2;
+        int l2 = a2 + (n2-1)*d2, l1 = a1 + (n1-1)*d1;
 
-        int a[n], b[n];
-
-        rp(i,0,n){
-            cin >> a[i];
+        if((d2%d1) != 0 || ((a2-a1)%d1) != 0 || (((a2-a1) / d1) + 1) <= 0 || (l2 > l1)){
+            cout << "0\n";
+            continue;
         }
 
-        rp(i,0,n){
-            cin >> b[i];
-        }
-
-        mii maxia,maxib;
-
-        rp(i,0,n){
-            int x = a[i];
-            int y = 0;
-            while(i < n && a[i]==x){
-                ++y;
-                ++i;
-            }
-            maxia[x] = max(maxia[x],y);
-            --i;
-        }
-
-        rp(i,0,n){
-            int x = b[i];
-            int y = 0;
-            while(i < n && b[i]==x){
-                ++y;
-                ++i;
-            }
-            maxib[x] = max(maxib[x],y);
-            --i;
+        if((a2 - d2) < a1 || (l2 + d2) > l1){
+            cout << "-1\n";
+            continue;
         }
 
         int ans = 0;
 
-        rp(i,1,2*n+1){
-            ans = max(ans,maxia[i]+maxib[i]);
+        for(int i = 1; i * i <= d2; i++){
+            if(d2%i==0){
+                int f1 = i, f2 = d2/i;
+                if(((f1*d1)/__gcd(f1,d1))==d2){
+                    int x = d2/f1;
+                    int y  = (x%M * x%M)%M;
+                    ans = (ans%M + y%M)%M;
+                }
+                if(f1!=f2 && ((f2*d1)/__gcd(f2,d1))==d2){
+                    int x = d2/f2;
+                    int y = (x%M * x%M)%M;
+                    ans = (ans%M + y%M)%M;
+                }
+            }
         }
-
 
         cout << ans << "\n";
 

@@ -26,59 +26,31 @@ int power(int a, int b, int mod){
 ll modInverse(ll n,ll mod){
     return power(n,mod-2,mod)%mod;}
 
+int fact[100007];
+
 signed main(){
     ios_base::sync_with_stdio(0);
     cin.tie(0);cout.tie(0);
     cout << fixed << setprecision(20);
 
     int t = 1;
-    cin >> t;
-
+    fact[0] = fact[1] = 1;
+    // cin >> t;
+    rp(i,2,100005)fact[i] = (i%M * fact[i-1]%M)%M;
     while(t--){
 
-        int n;
-        cin >> n;
-
-        int a[n], b[n];
-
-        rp(i,0,n){
-            cin >> a[i];
-        }
-
-        rp(i,0,n){
-            cin >> b[i];
-        }
-
-        mii maxia,maxib;
-
-        rp(i,0,n){
-            int x = a[i];
-            int y = 0;
-            while(i < n && a[i]==x){
-                ++y;
-                ++i;
-            }
-            maxia[x] = max(maxia[x],y);
-            --i;
-        }
-
-        rp(i,0,n){
-            int x = b[i];
-            int y = 0;
-            while(i < n && b[i]==x){
-                ++y;
-                ++i;
-            }
-            maxib[x] = max(maxib[x],y);
-            --i;
-        }
+        int n,k;
+        cin >> n >> k;
 
         int ans = 0;
-
-        rp(i,1,2*n+1){
-            ans = max(ans,maxia[i]+maxib[i]);
+        if(k>=n){
+            cout << power(2,n,M) << "\n";
+            continue;
         }
 
+        rp(i,0,k+1){
+            ans = (ans%M + ((fact[n]%M * modInverse(fact[i],M)%M)%M * modInverse(fact[n-i],M)%M)%M)%M;
+        }
 
         cout << ans << "\n";
 

@@ -12,83 +12,66 @@
 #define sz(a) (int)a.size()
 #define all(x) (x).begin(), (x).end()
 #define lb(a,b) lower_bound((a).begin(),(a).end(),b)
-const ll M = 1000000007;
+const ll M = 998244353;
 using namespace std;
 
-int power(int a, int b, int mod){
-    int ans = 1;
-    while (b > 0){
-        if (b & 1){ans = (ans%mod * 1LL * a%mod) % mod;}
-        a = (a%mod * 1LL * a%mod) % mod;
-        b >>= 1;}
-    return ans%mod;}
-
-ll modInverse(ll n,ll mod){
-    return power(n,mod-2,mod)%mod;}
-
+int sum[1000007];
 signed main(){
     ios_base::sync_with_stdio(0);
     cin.tie(0);cout.tie(0);
     cout << fixed << setprecision(20);
 
     int t = 1;
-    cin >> t;
+    // cin >> t;
+
+    int x = 1;
+    deq positions;
+    while(x <= ((1LL)<<(19))){
+        positions.pb(x);
+        x*=2;
+    }
 
     while(t--){
 
-        int n,k;
-        cin >> n >> k;
+        int n;
+        cin >> n;
 
-        string a[n],b[n];
-        rp(i,0,n)cin >> a[i];
-        rp(i,0,n)cin >> b[i];
+        int arr[n+1];
+        arr[0] = 0;
+        rp(i,1,((1LL)<<n)+1)cin >> arr[i];
 
-        int cnta[26], cntb[26];
-        int lena[20],lenb[20];
-
-        rp(i,0,26){
-            cnta[i] = cntb[i] = 0;
-        }
-
-        // rp(i,0,20){
-        //     lena[i] = lenb[i] = 0;
-        // }
-
-        bool check = true;
-        rp(i,0,n){
-            // lena[sz(a[i])]++;
-            // lenb[sz(b[i])]++;
-            if(sz(a[i])!=sz(b[i])){
-                check = false;
+        rp(i,1,((1LL)<<n)+1){
+            if(arr[i]!=-1){
+                auto itr = lower_bound(all(positions),i);
+                int x = itr - positions.begin();
+                sum[x]+=((1LL)<<(n-x));
+                // cout << arr[i] << " " << x << " " << sum[x] << "\n";
             }
-            for(auto j : a[i]){
-                cnta[(int)(j-'0')]++;
+            // cout << i << "\n";
+        }
+
+        // rp(i,0,n+1)cout << sum[i] << " ";
+        // cout << "\n";
+        rep(i,n,0){
+            sum[i]+=sum[i+1];
+        }
+        rp(i,0,n+1)cout << sum[i] << " ";
+        cout << "\n";
+        int k = n-1;
+        int ans = ((1LL)<<n) - sum[0];
+        cout << ans << "\n";
+        rp(i,1,n+1){
+            int left = ((1LL)<<k) - sum[i];
+            int y = 0;
+            rp(j,((1LL) << (i-1))+1,((1LL) << i)+1){
+                if(arr[j]!=-1)continue;
+                y = (y%M + left%M)%M;
             }
-            for(auto j : b[i]){
-                cntb[(int)(j-'0')]++;
-            }
+            // cout << left << " " << ans  << " " << y << "\n";
+            ans = (ans%M * y%M)%M;
+            --k;
         }
-
-
-        // rp(i,0,20){
-        //     if(lena[i]!=lenb[i])check = false;
-        // }
-
-        if(!check){
-            cout << "NO\n";
-            continue;
-        }
-
-        int cost = 0;
-
-        rp(i,0,26){
-            cost+=abs(cnta[i]-cntb[i]);
-        }
-
-        cost/=2;
-
-        cost<=k ? cout << "YES\n" : cout << "NO\n";
-
+        cout << ans%M << "\n";
     }
 
     return 0;}

@@ -28,29 +28,24 @@ signed main(){
         int n;
         cin >> n;
 
-        int peeche[n] = {0}, aage[n] = {0};
-
-        int arr[n];
-        rp(i,0,n)cin >> arr[i];
-        int total = 0;
+        int a[n];
 
         rp(i,0,n){
-            rp(j,i+1,n){
-                if(arr[j]<arr[i]){
-                    total++;
-                    peeche[j]++;
-                    aage[i]++;
-                }
+            cin >> a[i];
+        }
+
+        int l = 0;
+
+        rp(i,0,n-1){
+            for(int j = n; j > l; j--){
+                a[j]-=a[j-1];
             }
+            a[i] = 0;
+            sort(a+l,a+n);
+            while(l<n && a[l]==0)++l;
         }
 
-        rp(i,0,n){
-            int x = total - peeche[i] - aage[i] + i;
-            int y = total - peeche[i] - aage[i] + n - i - 1;
-            cout << max(x,y) << " ";
-        }
-        cout << "\n";
-
+        cout << a[n-1] << "\n";
 
     }
 
