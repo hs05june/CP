@@ -15,16 +15,29 @@
 const ll M = 1000000007;
 using namespace std;
 
-int power(int a, int b, int mod){
-    int ans = 1;
-    while (b > 0){
-        if (b & 1){ans = (ans%mod * 1LL * a%mod) % mod;}
-        a = (a%mod * 1LL * a%mod) % mod;
-        b >>= 1;}
-    return ans%mod;}
+int n,k;
+int arr[200007];
 
-ll modInverse(ll n,ll mod){
-    return power(n,mod-2,mod)%mod;}
+bool check(int mid){
+    int filled = 0, left = mid;
+    rp(i,1,n+1){
+        if(arr[i]>=mid){
+            filled++;
+        }
+        else if(arr[i]==left){
+            filled++;
+            left = mid;
+        }
+        else if(arr[i]>left){
+            filled++;
+            int z = arr[i] - left;
+            left = mid - z;
+        }
+        else if(arr[i]<left)left-=arr[i];
+    }
+    // cout << mid << " " << filled << "\n";
+    return (filled>=k);
+}
 
 signed main(){
     ios_base::sync_with_stdio(0);
@@ -36,52 +49,23 @@ signed main(){
 
     while(t--){
 
-        int n;
-        cin >> n;
+        cin >> n >> k;
+        arr[0] = 0;
 
-        set<pii> check[n+1];
+        int sum = 0;
+        
+        rp(i,1,n+1){cin >> arr[i];sum+=arr[i];}
 
-        rp(i,1,n){
-            int a,b;
-            cin >> a >> b;
-            check[a].insert({i,b});
-            check[b].insert({i,a});
+        int low = 0, high = (sum/k);
+
+        while((high-low)>1){
+            int mid = (low+high)/2;
+            if(check(mid))low = mid;
+            else high = mid-1;
         }
 
-        int ans[n+1];
-        rp(i,1,n+1)ans[i] = 0;
-        ans[1] = 1;
-
-        queue<pii> bfs;
-        bfs.push({1,0});
-        while(!bfs.empty()){
-            auto x = bfs.front();
-            bfs.pop();
-            auto itr1 = check[x.f].lower_bound({x.s,0});
-            auto itr2 = check[x.f].lower_bound({x.s,0});
-            while(itr1!=check[x.f].end()){
-                auto z = *itr1;
-                ++itr1;
-                if(ans[z.s]!=0)continue;
-                ans[z.s] = ans[x.f];
-                bfs.push({z.s,z.f});
-            }
-            auto itr = check[x.f].begin();
-            while(itr!=itr2){
-                auto z = *itr;
-                ++itr;
-                if(ans[z.s]!=0)continue;
-                ans[z.s] = 1 + ans[x.f];
-                bfs.push({z.s,z.f});
-            }
-        }
-
-        int maxi = 0;
-        ans[0] = 0;
-        rp(i,1,n+1)maxi = max(maxi,ans[i]);
-        // rp(i,0,n+1)cout << ans[i] << " ";
-        // cout << "\n";
-        cout << maxi << "\n";
+        if(check(high))cout << high << "\n";
+        else cout << low << "\n";
 
     }
 

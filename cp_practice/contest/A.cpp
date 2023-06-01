@@ -35,53 +35,15 @@ signed main(){
     cin >> t;
 
     while(t--){
-
-        int n;
-        cin >> n;
-
-        int a[n], b[n];
-
-        rp(i,0,n){
-            cin >> a[i];
+        int n,k;
+        cin >> n >> k;
+        int x = k;
+        int ans = 1;
+        rp(i,0,min(n,k)){
+            ans = (ans%M * x%M)%M;
+            x--;
         }
-
-        rp(i,0,n){
-            cin >> b[i];
-        }
-
-        mii maxia,maxib;
-
-        rp(i,0,n){
-            int x = a[i];
-            int y = 0;
-            while(i < n && a[i]==x){
-                ++y;
-                ++i;
-            }
-            maxia[x] = max(maxia[x],y);
-            --i;
-        }
-
-        rp(i,0,n){
-            int x = b[i];
-            int y = 0;
-            while(i < n && b[i]==x){
-                ++y;
-                ++i;
-            }
-            maxib[x] = max(maxib[x],y);
-            --i;
-        }
-
-        int ans = 0;
-
-        rp(i,1,2*n+1){
-            ans = max(ans,maxia[i]+maxib[i]);
-        }
-
-
         cout << ans << "\n";
-
     }
 
     return 0;}

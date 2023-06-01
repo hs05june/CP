@@ -36,15 +36,14 @@ signed main(){
 
 	while(t--){
 
-		int n;
-		cin >> n;
-
-		int a[n];
-
-		rp(i,0,n)cin >> a[i];
-
-		rp(i,0,n)cout << n+1-a[i] << " ";
-		cout << "\n";
+		int l,w;
+		cin >> l >> w;
+		if((l&1) && (w&1)){
+			cout << "NO\n";
+		}
+		else{
+			cout << "YES\n";
+		}
 
 	}
 

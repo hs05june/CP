@@ -1,8 +1,8 @@
 #include<bits/stdc++.h>
 #define rp(i,a,n) for(int i=a;i<n;i++)
 #define rep(i,a,n) for(int i=a;i>=n;i--)
-#define ll long long
-#define int long long
+#define ll unsigned long long
+#define int unsigned long long
 #define deq vector<ll>
 #define mii map<ll,ll>
 #define pii pair<ll,ll>
@@ -15,7 +15,6 @@
 const ll M = 1000000007;
 using namespace std;
 
-
 signed main(){
     ios_base::sync_with_stdio(0);
     cin.tie(0);cout.tie(0);
@@ -26,58 +25,42 @@ signed main(){
 
     while(t--){
 
-        int n;
-        cin >> n;
+        int n,k;
+        cin >> n >> k;
+        int m = n;
+        int arr[n];
+        rp(i,0,n)cin >> arr[i];
 
-        int a[n+1], b[n+1];
+        sort(arr,arr+n);
 
-        mii store[n+1];
-        set<int> store1[n+1];
+        int index = n-1;
 
-        map<pii,int> index;
-        
-        rp(i,1,n+1){
-            cin >> a[i];
-        }
-
-        rp(i,1,n+1){
-            cin >> b[i];
-            store[a[i]][b[i]]++;
-            store1[a[i]].insert(b[i]);
-        }
-
-        // for(auto i : store[3])cout << i.f << " " << i.s << "\n";
-
-        int ans = 0;
-        
-        rp(i,1,n+1){
-            rp(j,i,n+1){
-                // cout << i << " " << j << "\n";
-                if(i*j>2*n)break;
-                for(auto k : store1[i]){
-                    // if(i*j - k > n)break;
-                    // if(i*j - k <= 0)continue;
-                    int po = i*j - k;
-                    // cout << i << " " << j << " " << po << "\n";
-                    if(store[j].count(po)){
-                        index[{i,k}]+=store[j][po];
-                        if(i!=j || po!=k)index[{j,po}]+=store[i][k];
-                    }
-                }
+        rp(i,0,n-1){
+            int z = arr[i+1] - arr[i];
+            int req = z*(i+1);
+            if(k>=req){
+                k-=req;
+            }
+            else{
+                index = i;
+                break;
             }
         }
-
-        for(auto i : index){
-            // cout << i.f.f << " " << i.f.s << " = " << i.s << "\n"; 
-            ans += i.s;
+        
+        if(k>0){
+            int x = k/(index+1), y = k%(index+1);
+            arr[index]=(x%M + arr[index]%M)%M;
+            rp(i,0,index)arr[i] = (arr[index]%M);
+            rp(i,0,y)arr[i] = (arr[i]%M + 1%M)%M;
         }
 
-        // rp(i,0,n){
-        //     ans+=index[{a[i],b[i]}];
-        // }
+        int ans = 0, sum = 0;
 
-        cout << ans << "\n";
-
+        rp(i,0,n){
+            ans = (ans%M + (arr[i]%M * sum%M)%M)%M;
+            sum = sum + arr[i];
+        }
+        cout << ans%M << "\n";
     }
 
     return 0;}
