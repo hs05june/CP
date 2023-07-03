@@ -15,6 +15,22 @@
 const ll M = 1000000007;
 using namespace std;
 
+int parent[100007];
+int Size[100007];
+
+int Find(int x){
+    if(x == parent[x])return x;
+    return parent[x] = Find(parent[x]);
+}
+
+void Union(int a, int b){
+    int x = Find(a), y = Find(b);
+    if(x==y)return;
+    if(Size[x] > Size[y])swap(x,y);
+    Size[y]+=Size[x];
+    parent[x] = y;
+}
+
 signed main(){
     ios_base::sync_with_stdio(0);
     cin.tie(0);cout.tie(0);
@@ -23,40 +39,31 @@ signed main(){
     int n,m;
     cin >> n >> m;
 
-    vector<pii> graph[n+1];
+    rp(i,0,n+1){
+        parent[i] = i;
+        Size[i] = 1;
+    }
+
+    multiset<tuple<int,int,int>> edges;
 
     rp(i,0,m){
         int a,b,c;
         cin >> a >> b >> c;
-        graph[a].pb({b,c});
-        graph[b].pb({a,c});
+        edges.insert(make_tuple(c,a,b));
     }
-
-    int visited[n+1];
-    rp(i,0,n+1)visited[i] = 0;
 
     ll ans = 0;
-    multiset<pii> tree;
-    tree.insert({0,1});
 
-    while(!tree.empty()){
-        auto itr = *(tree.begin());
-        int weight = itr.f, parent = itr.s;
-        tree.erase(tree.begin());
-        if(visited[parent]==1)continue;
-        visited[parent] = 1;
-        ans += weight;
-        for(auto i : graph[parent]){
-            if(visited[i.f]==0){
-                tree.insert({i.s,i.f});
-            }
-        }
+    while(!edges.empty()){
+        auto itr = *(edges.begin());
+        edges.erase(edges.begin());
+        int x = get<0>(itr), y = get<1>(itr), z = get<2>(itr);
+        if(Find(y) == Find(z))continue;
+        ans += x;
+        Union(y,z);
     }
 
-    bool check = true;
-    rp(i,1,n+1)if(visited[i]==0)check = false;
-
-    if(!check){
+    if(Size[Find(1)]!=n){
         cout << "IMPOSSIBLE\n";
         return 0;
     }

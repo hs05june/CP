@@ -1,128 +1,83 @@
-#include <bits/stdc++.h>
-#define rp(i, a, n) for (int i = a; i < n; i++)
-#define rep(i, a, n) for (int i = a; i <= n; i++)
+#include<bits/stdc++.h>
+#define rp(i,a,n) for(int i=a;i<n;i++)
+#define rep(i,a,n) for(int i=a;i>=n;i--)
 #define ll long long
-#define int long long
+#define ld long double
 #define deq vector<ll>
-#define mii map<ll, ll>
-#define pii pair<ll, ll>
+#define mii map<ll,ll>
+#define pii pair<ll,ll>
 #define pb push_back
 #define f first
 #define s second
 #define sz(a) (int)a.size()
 #define all(x) (x).begin(), (x).end()
-#define lb(a, b) lower_bound((a).begin(), (a).end(), b)
+#define lb(a,b) lower_bound((a).begin(),(a).end(),b)
 const ll M = 1000000007;
 using namespace std;
 
-int levela[1007][1007], levelm[1007][1007], n, m;
-int visiteda[1007][1007], visitedm[1007][1007];
-char a[1007][1007];
-
-pii moves[4] = {{0,1},{0,-1},{1,0},{-1,0}};
+int moves[][2] = {{0,1},{0,-1},{1,0},{-1,0}};
 char path[4] = {'L','R','U','D'};
 
-signed main()
-{
+signed main(){
     ios_base::sync_with_stdio(0);
-    cin.tie(0);
-    cout.tie(0);
+    cin.tie(0);cout.tie(0);
     cout << fixed << setprecision(20);
 
-    int t = 1;
+    int n,m;
+    cin >> n >> m;
 
-    while (t--)
-    {
+    string a[n];
 
-        cin >> n >> m;
-        vector<pii> monsters;pii Start;
+    int levelm[n][m], levela[n][m], visited[n][m];
 
-        rp(i, 0, n)
-        {
-            rp(j,0,m){
-                cin >> a[i][j];
-            }
-        }
-        rep(i,0,n){
-            rp(j, 0, m)
-            {
-                if (a[i][j] == 'A')
-                {
-                    Start = {i, j};
-                }
-                if (a[i][j] == 'M')
-                {
-                    monsters.pb({i, j});
-                }
-            }
-        }
-        rp(i,0,n){
-            rp(j,0,m){
-                levela[i][j] = LLONG_MAX;
-                levelm[i][j] = LLONG_MAX;
-            }
-        }
+    rp(i,0,n)cin >> a[i];
 
-    queue<pii> bfsa;
-    bfsa.push(Start);
-    levela[Start.f][Start.s] = 0;
-    visiteda[Start.f][Start.s] = 1;
-
-    while(sz(bfsa)!=0){
-        pii x = bfsa.front();
-        bfsa.pop();
-        rp(i,0,4){
-            pii x1 = {x.f+moves[i].f,x.s+moves[i].s};
-            if(x1.f >= 0 && x1.f < n && x1.s >= 0 && x1.s < m && visiteda[x1.f][x1.s] == 0 && (a[x1.f][x1.s] == '.')){
-                visiteda[x1.f][x1.s] = 1;
-                levela[x1.f][x1.s] = 1 + levela[x.f][x.s];
-                bfsa.push(x1);
-            }
-        }
-    }
-
-    bool check = false;
+    queue<pii> bfsm, bfsa;
 
     rp(i,0,n){
-        if(levela[i][0]!=LLONG_MAX){
-            check = true;
-            break;
-        }
-        if(levela[i][m-1]!=LLONG_MAX){
-            check = true;
-            break;
-        }
-        if(levela[0][i]!=LLONG_MAX){
-            check = true;
-            break;
-        }
-        if(levela[n-1][i]!=LLONG_MAX){
-            check = true;
-            break;
+        rp(j,0,m){
+            levela[i][j] = levelm[i][j] = INT_MAX;
+            visited[i][j] = 0;
+            if(a[i][j] == 'M'){
+                levelm[i][j] = 0;
+                visited[i][j] = 1;
+                bfsm.push({i,j});
+            }
+            if(a[i][j]=='A'){
+                levela[i][j] = 0;
+                bfsa.push({i,j});
+            }
         }
     }
 
-    if(!check){
-        cout << "NO\n";
-        continue;
-    }
-
-    queue<pii> bfsm;
-    rp(i,0,sz(monsters)){
-        bfsm.push({monsters[i].f,monsters[i].s});
-        levelm[monsters[i].f][monsters[i].s] = 0;
-        visitedm[monsters[i].f][monsters[i].s] = 1;
-    }
-
-    while(sz(bfsm)!=0){
-        pii x = bfsm.front();
+    while(!bfsm.empty()){
+        auto x = bfsm.front().f, y = bfsm.front().s;
         bfsm.pop();
         rp(i,0,4){
-            pii x1 = {x.f+moves[i].f,x.s+moves[i].s};
-            if(x1.f >= 0 && x1.f < n && x1.s >= 0 && x1.s < m && (visitedm[x1.f][x1.s] == 0 || levelm[x1.f][x1.s]>levelm[x.f][x.s]+1) && (a[x1.f][x1.s] == '.')){
-                visitedm[x.f][x.s] = 1;
-                levelm[x1.f][x1.s] = 1 + levelm[x.f][x.s];
-                bfsm.push(x1);
+            int x1 = x + moves[i][0], y1 = y + moves[i][1];
+            if(x1 >= 0 && x1 < n && y1 >= 0 && y1 < m && visited[x1][y1] == 0 && a[x1][y1] != '#'){
+                levelm[x1][y1] = 1 + levelm[x][y];
+                visited[x1][y1] = 1;
+                bfsm.push({x1, y1});
+            }
+        }
+    }
+
+    rp(i,0,n){
+        rp(j,0,m)visited[i][j] = 0;
+    }
+
+    visited[bfsa.front().f][bfsa.front().s] = 1;
+
+    while(!bfsa.empty()){
+        auto x = bfsa.front().f, y = bfsa.front().s;
+        bfsa.pop();
+        rp(i,0,4){
+            int x1 = x + moves[i][0], y1 = y + moves[i][1];
+            if(x1 >= 0 && x1 < n && y1 >= 0 && y1 < m && visited[x1][y1] == 0 && a[x1][y1] != '#' && levelm[x1][y1] > (1 + levela[x][y])){
+                levela[x1][y1] = 1 + levela[x][y];
+                visited[x1][y1] = 1;
+                bfsa.push({x1, y1});
             }
         }
     }
@@ -130,47 +85,51 @@ signed main()
     pii ans = {-1,-1};
 
     rp(i,0,n){
-        if(levela[i][0]<levelm[i][0]){
-            ans = {i,0};
+        if(visited[i][0] == 1){
+            ans.f = i;
+            ans.s = 0;
             break;
         }
-        if(levela[i][m-1]<levelm[i][m-1]){
-            ans = {i,m-1};
-            break;
-        }
-        if(levela[0][i]<levelm[0][i]){
-            ans = {0,i};
-            break;
-        }
-        if(levela[n-1][i]<levelm[n-1][i]){
-            ans = {n-1,i};
+        if(visited[i][m-1] == 1){
+            ans.f = i;
+            ans.s = m-1;
             break;
         }
     }
 
-    if(ans.f==-1||ans.s==-1){
+    rp(i,0,m){
+        if(visited[0][i] == 1){
+            ans.f = 0;
+            ans.s = i;
+            break;
+        }
+        if(visited[n-1][i] == 1){
+            ans.f = n-1;
+            ans.s = i;
+            break;
+        }
+    }
+
+    if(ans.f == -1 && ans.s == -1){
         cout << "NO\n";
-        continue;
+        return 0;
     }
 
     cout << "YES\n" << levela[ans.f][ans.s] << "\n";
-
-    string ans1;
-    
-    pii x = ans;
-    while(x!=Start){
+    // cout << ans.f << " " << ans.s << "\n";
+    string ans1 = "";
+    while(levela[ans.f][ans.s] != 0){
         rp(i,0,4){
-            pii x1 = {x.f+moves[i].f,x.s+moves[i].s};
-            if(x1.f>=0 && x1.f<n && x1.s>=0 && x1.s<m && levela[x1.f][x1.s]==levela[x.f][x.s]-1){
+            int x1 = (ans.f + moves[i][0]), y1 = (ans.s + moves[i][1]);
+            if(x1 >= 0 && x1 < n && y1 >= 0 && y1 < m && visited[x1][y1] == 1 && levela[x1][y1] == (levela[ans.f][ans.s]-1)){
                 ans1.pb(path[i]);
-                x = x1;
+                ans = {x1,y1};
                 break;
             }
         }
     }
+
     reverse(all(ans1));
     cout << ans1 << "\n";
-    // cout << Start.f << "," << Start.s << " " << ans.f << "," << ans.s << "\n" << levela[999][5] << " " << levelm[999][5] << " ";
-    }
-    return 0;
-}
+
+    return 0;}

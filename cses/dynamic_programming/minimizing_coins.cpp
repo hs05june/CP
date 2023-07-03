@@ -1,8 +1,8 @@
 #include<bits/stdc++.h>
 #define rp(i,a,n) for(int i=a;i<n;i++)
-#define rep(i,a,n) for(int i=a;i<=n;i++)
+#define rep(i,a,n) for(int i=a;i>=n;i--)
 #define ll long long
-#define int long long
+#define ld long double
 #define deq vector<ll>
 #define mii map<ll,ll>
 #define pii pair<ll,ll>
@@ -31,27 +31,21 @@ signed main(){
     cin.tie(0);cout.tie(0);
     cout << fixed << setprecision(20);
 
-    int n,x;
-
+    ll n, x;
     cin >> n >> x;
 
-    int arr[n+1] = {0};
+    ll arr[n];
+    rp(i,0,n) cin >> arr[i];
 
-    rep(i,1,n)cin >> arr[i];
-
-    int dp[x+1] = {0};
+    ll dp[x+1];
+    rp(i,1,x+1) dp[i] = INT_MAX;
     dp[0] = 0;
 
-    dp[x]=INT_MAX;
-
-    rep(i,1,x){
-        dp[i] = INT_MAX;
-        rep(j,1,n){
-            if((i-arr[j])<0)continue;
-            dp[i] = min(dp[i],1+dp[i-arr[j]]);
+    rp(i,1,x+1){
+        rp(j,0,n){
+            if(i - arr[j] >= 0 && dp[i-arr[j]] != INT_MAX)dp[i] = min(dp[i],1+dp[i-arr[j]]);
         }
     }
-
-    dp[x]==INT_MAX ? cout << "-1\n" : cout << dp[x] << "\n";
+    dp[x] == INT_MAX ? cout << "-1\n" : cout << dp[x] << "\n";
 
     return 0;}

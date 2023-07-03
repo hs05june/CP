@@ -2,7 +2,7 @@
 #define rp(i,a,n) for(int i=a;i<n;i++)
 #define rep(i,a,n) for(int i=a;i>=n;i--)
 #define ll long long
-#define int long long
+#define ld long double
 #define deq vector<ll>
 #define mii map<ll,ll>
 #define pii pair<ll,ll>
@@ -36,14 +36,18 @@ signed main(){
 
 	while(t--){
 
-		int l,w;
-		cin >> l >> w;
-		if((l&1) && (w&1)){
-			cout << "NO\n";
-		}
-		else{
+		ll n,m,k;
+		cin >> n >> m >> k;
+
+		ll arr[n];
+		rp(i,0,n)cin >> arr[i];
+
+		int maxi = arr[n-1] + k - 1;
+
+		if(m >= maxi){
 			cout << "YES\n";
 		}
+		else cout << "NO\n";
 
 	}
 

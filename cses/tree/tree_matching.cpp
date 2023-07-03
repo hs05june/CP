@@ -3,7 +3,6 @@
 #define rep(i,a,n) for(int i=a;i>=n;i--)
 #define ll long long
 #define ld long double
-#define int long long
 #define deq vector<ll>
 #define mii map<ll,ll>
 #define pii pair<ll,ll>
@@ -16,29 +15,48 @@
 const ll M = 1000000007;
 using namespace std;
 
-int power(int a, int b, int mod){
-    int ans = 1;
-    while (b > 0){
-        if (b & 1){ans = (ans%mod * 1LL * a%mod) % mod;}
-        a = (a%mod * 1LL * a%mod) % mod;
-        b >>= 1;}
-    return ans%mod;}
+deq graph[200007];
+ll visited[200007];
+ll ans;
 
-ll modInverse(ll n,ll mod){
-    return power(n,mod-2,mod)%mod;}
+ll solve(ll n){
+    ll check = 0;
+    for(auto i : graph[n]){
+        if(visited[i]==0){
+            visited[i] = 1;
+            ll z = solve(i);
+            check |= z;
+        }
+    }
+    if(check){
+        ans++;
+        return 0;
+    }
+    else{
+        return 1;
+    }
+}
 
 signed main(){
     ios_base::sync_with_stdio(0);
     cin.tie(0);cout.tie(0);
     cout << fixed << setprecision(20);
 
-    int t = 1;
-    cin >> t;
+    ll n;
+    cin >> n;
 
-    while(t--){
+    ans = 0;
 
-        
-
+    rp(i,1,n){
+        ll a,b;
+        cin >> a >> b;
+        graph[a].pb(b);
+        graph[b].pb(a);
     }
+
+    visited[1] = 1;
+    ll z = solve(1);
+
+    cout << ans << "\n";
 
     return 0;}

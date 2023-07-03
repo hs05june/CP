@@ -2,7 +2,7 @@
 #define rp(i,a,n) for(int i=a;i<n;i++)
 #define rep(i,a,n) for(int i=a;i>=n;i--)
 #define ll long long
-#define int long long
+#define ld long double
 #define deq vector<ll>
 #define mii map<ll,ll>
 #define pii pair<ll,ll>
@@ -15,29 +15,16 @@
 const ll M = 1000000007;
 using namespace std;
 
-int n,k;
-int arr[200007];
+int power(int a, int b, int mod){
+    int ans = 1;
+    while (b > 0){
+        if (b & 1){ans = (ans%mod * 1LL * a%mod) % mod;}
+        a = (a%mod * 1LL * a%mod) % mod;
+        b >>= 1;}
+    return ans%mod;}
 
-bool check(int mid){
-    int filled = 0, left = mid;
-    rp(i,1,n+1){
-        if(arr[i]>=mid){
-            filled++;
-        }
-        else if(arr[i]==left){
-            filled++;
-            left = mid;
-        }
-        else if(arr[i]>left){
-            filled++;
-            int z = arr[i] - left;
-            left = mid - z;
-        }
-        else if(arr[i]<left)left-=arr[i];
-    }
-    // cout << mid << " " << filled << "\n";
-    return (filled>=k);
-}
+ll modInverse(ll n,ll mod){
+    return power(n,mod-2,mod)%mod;}
 
 signed main(){
     ios_base::sync_with_stdio(0);
@@ -49,23 +36,27 @@ signed main(){
 
     while(t--){
 
-        cin >> n >> k;
-        arr[0] = 0;
+        ll n,m;
+        cin >> n >> m;
 
-        int sum = 0;
-        
-        rp(i,1,n+1){cin >> arr[i];sum+=arr[i];}
-
-        int low = 0, high = (sum/k);
-
-        while((high-low)>1){
-            int mid = (low+high)/2;
-            if(check(mid))low = mid;
-            else high = mid-1;
+        vector<ll> q;
+        q.pb(0);
+        rp(i,0,m){
+            ll a;
+            cin >> a;
+            q.pb(a);
         }
 
-        if(check(high))cout << high << "\n";
-        else cout << low << "\n";
+        q.pb(n+1);
+        ll ans = 0;
+        sort(all(q));
+
+        rp(i,1,sz(q)){
+            ll x = q[i-1], y = q[i];
+            ans += ((y*(y-1))/2 - (x*(x+1))/2);
+        }
+
+        cout << ans << "\n";
 
     }
 

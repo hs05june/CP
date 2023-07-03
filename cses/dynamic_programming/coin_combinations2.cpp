@@ -1,7 +1,8 @@
 #include<bits/stdc++.h>
 #define rp(i,a,n) for(int i=a;i<n;i++)
-#define rep(i,a,n) for(int i=a;i<=n;i++)
+#define rep(i,a,n) for(int i=a;i>=n;i--)
 #define ll long long
+#define ld long double
 #define deq vector<ll>
 #define mii map<ll,ll>
 #define pii pair<ll,ll>
@@ -14,32 +15,38 @@
 const ll M = 1000000007;
 using namespace std;
 
-int dp[107][1000007];
-int a[107];
+int power(int a, int b, int mod){
+    int ans = 1;
+    while (b > 0){
+        if (b & 1){ans = (ans%mod * 1LL * a%mod) % mod;}
+        a = (a%mod * 1LL * a%mod) % mod;
+        b >>= 1;}
+    return ans%mod;}
+
+ll modInverse(ll n,ll mod){
+    return power(n,mod-2,mod)%mod;}
 
 signed main(){
     ios_base::sync_with_stdio(0);
     cin.tie(0);cout.tie(0);
     cout << fixed << setprecision(20);
 
-    int n,x;
+    ll n,x;
     cin >> n >> x;
 
-    rep(i,1,n)cin >> a[i];
+    ll arr[n];
+    rp(i,0,n) cin >> arr[i];
+    
+    ll dp[x+1];
+    rp(i,0,x+1) dp[i] = 0;
+    dp[0] = 1;
 
-    rep(i,0,100){
-        dp[i][0] = 1%M;
-    }
-
-    rep(i,1,n){
-        rep(j,1,x){
-            dp[i][j] = dp[i-1][j]%M;
-            if((j-a[i])>=0){
-                dp[i][j] = (dp[i][j]%M + dp[i][j-a[i]]%M)%M;
-            }
+    rp(j,0,n){
+        rp(i,1,x+1){
+            if(i-arr[j]>=0)dp[i] = (dp[i]%M + dp[i-arr[j]]%M)%M;
         }
     }
 
-    cout << dp[n][x]%M << endl;
+    cout << dp[x] << "\n";
 
     return 0;}

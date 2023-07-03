@@ -1,8 +1,9 @@
 #include<bits/stdc++.h>
 #define rp(i,a,n) for(int i=a;i<n;i++)
-#define rep(i,a,n) for(int i=a;i<=n;i++)
+#define rep(i,a,n) for(int i=a;i>=n;i--)
 #define ll long long
 #define int long long
+#define ld long double
 #define deq vector<ll>
 #define mii map<ll,ll>
 #define pii pair<ll,ll>
@@ -15,54 +16,56 @@
 const ll M = 1000000007;
 using namespace std;
 
-int visited[100007];
-vector<pii> graph[100007],distances[100007];
-
-void djikstra(int src){
-    multiset<pair<int,pii>> bfs;
-    bfs.insert({0,{0,src}});
-
-    while(sz(bfs)){
-        auto x = *(bfs.begin());
-        bfs.erase(bfs.begin());
-        int parent = x.s.s, maxi = x.s.f, dist = x.f;
-        if(visited[parent]>=10)continue;
-        visited[parent]++;
-        for(auto i : graph[parent]){
-            int child = i.f, wt = i.s;
-            int maxi1 = wt>maxi ? wt : maxi;
-            int dis = wt + dist;
-            distances[child].pb({dis,maxi1});
-            bfs.insert({dis,{maxi1,child}});
-        }
-    }
-}
+int visited[100007][2];
+vector<pii> graph[100007];
+ll distances[100007][2];
 
 signed main(){
     ios_base::sync_with_stdio(0);
     cin.tie(0);cout.tie(0);
     cout << fixed << setprecision(20);
 
-    int t = 1;
+    int n,m;
+    cin >> n >> m;
 
-    while(t--){
-
-        int n,m;
-        cin >> n >> m;
-
-        rep(i,1,m){
-            int a,b,c;
-            cin >> a >> b >> c;
-            graph[a].pb({b,c});
-        }
-
-        djikstra(1);
-        int ans = LLONG_MAX;
-        for(auto i : distances[n]){
-            ans = min(ans,(i.f - ((i.s)-(i.s)/2)));
-            // cout << i.f << " " << i.s << endl;
-        }
-        cout << ans << "\n";
+    rp(i,0,m){
+        int a,b,c;
+        cin >> a >> b >> c;
+        graph[a].pb({b,c});
+        // graph[b].pb({a,c});
     }
+
+    rp(i,0,n+1){
+        distances[i][0] = distances[i][1] = LLONG_MAX;
+    }
+
+    multiset<pair<int,pii>> bfs;
+    distances[1][0] = distances[1][1] = 0;
+
+    bfs.insert({0,{1,0}});
+
+    while(!bfs.empty()){
+        auto x = *(bfs.begin());
+        int flag = x.s.s, dist = x.f, par = x.s.f;
+        bfs.erase(bfs.begin());
+        if(visited[par][flag]==1)continue;
+        visited[par][flag] = 1;
+        for(auto i : graph[par]){
+            if(distances[i.f][flag] > (dist + i.s)){
+                distances[i.f][flag] = dist + i.s;
+                bfs.insert({dist + i.s,{i.f,flag}});
+            }
+        }
+        if(flag == 0){
+            for(auto i : graph[par]){
+                if(distances[i.f][1] > (dist + (i.s/2))){
+                    distances[i.f][1] = dist + (i.s/2);
+                    bfs.insert({dist + (i.s/2),{i.f,1}});
+                }
+            }      
+        }
+    }
+
+    cout << min(distances[n][0],distances[n][1]) << "\n";
 
     return 0;}

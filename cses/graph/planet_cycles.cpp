@@ -2,7 +2,7 @@
 #define rp(i,a,n) for(int i=a;i<n;i++)
 #define rep(i,a,n) for(int i=a;i>=n;i--)
 #define ll long long
-#define int long long
+#define ld long double
 #define deq vector<ll>
 #define mii map<ll,ll>
 #define pii pair<ll,ll>
@@ -15,37 +15,28 @@
 const ll M = 1000000007;
 using namespace std;
 
-int arr[200007], ans[200007], levels[200007], parent[200007];
-set<int> df;
+int arr[200007], parent[200007];
+int dp[200007], levels[200007];
+set<int> dfs;
 
-void dfs(int n, int par){
-    parent[n] = par;
-    df.insert(n);
-    if(ans[arr[n]]!=0){
-        for(auto i : df){
-            ans[i] = abs(levels[n]-levels[i]) + 1 + ans[arr[n]];
+void solve(int n){
+    if(dfs.count(n)){
+        int z = abs(levels[n]-levels[parent[n]]) + 1;
+        dp[n] = z;
+        int par = parent[n];
+        while(par != n){
+            dp[par] = z;
+            par = par[parent];
         }
         return;
     }
-    if(levels[arr[n]]!=0){
-        int k = abs(levels[n]-levels[arr[n]])+1;
-        ans[n]=k;
-        df.erase(n);
-        int x = arr[n];
-        while(x!=n){
-            ans[x] = k;
-            df.erase(x);
-            x = arr[x];
-        }
-        for(auto i : df){
-            ans[i] = abs(levels[arr[n]]-levels[i]) + k;
-        }
-        return;
+    dfs.insert(n);
+    levels[n] = 1+levels[parent[n]];
+    if(dp[arr[n]]==-1){
+        parent[arr[n]] = n;
+        solve(arr[n]);
     }
-    else{
-        levels[arr[n]] = 1 + levels[n];
-        dfs(arr[n],n);
-    }
+    if(dp[n]==-1)dp[n] = 1 + dp[arr[n]];
 }
 
 signed main(){
@@ -56,24 +47,17 @@ signed main(){
     int n;
     cin >> n;
 
-    rp(i,0,n+1){
-        arr[i] = ans[i] = 0;
-    }
+    rp(i,0,n+1)dp[i] = -1;
+
+    rp(i,1,n+1) cin >> arr[i];
 
     rp(i,1,n+1){
-        cin >> arr[i];
-    }
-
-    rp(i,1,n+1){
-        if(levels[i]==0){
-            df.clear();
-            levels[i] = 1;
-            dfs(i,0);
+        dfs.clear();
+        if(dp[i]==-1){
+            solve(i);
         }
     }
 
-    rp(i,1,n+1){
-        cout << ans[i] << " ";
-    }
+    rp(i,1,n+1)cout << dp[i] << " ";
 
     return 0;}

@@ -2,8 +2,8 @@
 #define rp(i,a,n) for(int i=a;i<n;i++)
 #define rep(i,a,n) for(int i=a;i>=n;i--)
 #define ll long long
-#define ld long double
 #define int long long
+#define ld long double
 #define deq vector<ll>
 #define mii map<ll,ll>
 #define pii pair<ll,ll>
@@ -37,8 +37,18 @@ signed main(){
 
     while(t--){
 
-        
+        int ans = 0;
 
+        rp(i,0,30){
+            int x = ((1LL) << i);
+            cout << "? " << x - ans << " " << (3*x) - ans << endl;
+            int y;
+            cin >> y;
+            if(y == 2*x){
+                ans += x;
+            }
+        }
+        cout << "! " << ans << endl;
     }
 
     return 0;}

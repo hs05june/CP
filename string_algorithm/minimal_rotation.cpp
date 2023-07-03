@@ -56,22 +56,23 @@ signed main(){
     hash[0] = code[a[0]];
 
     rp(i,1,2*n){
-        hash[i] = ((x%M * hash[i-1]%M)%M + code[a[i]]%M)%M;
+        // hash[i] = ((x%M * hash[i-1]%M)%M + code[a[i]]%M)%M;
+        hash[i] = x * hash[i-1] + code[a[i]];
     }
 
     pair<int,pii> ans = {hash[n-1],{0,n-1}};
 
-    cout << ans.f << " " << ans.s.f << " " << ans.s.s <<"\n";
+    // cout << ans.f << " " << ans.s.f << " " << ans.s.s <<"\n";
 
     rep(i,1,n){
         int z = hash[i+n-1] - hash[i-1]*power(x,n,M);
-        cout << z << " " << i << " " << i+n-1 << "\n";
+        // cout << z << " " << i << " " << i+n-1 << "\n";
         if(z>ans.f){
             ans = {z,{i,i+n-1}};
         }
     }
 
-    cout << ans.f << "\n";
+    // cout << ans.f << "\n";
 
     rep(i,ans.s.f,ans.s.s){
         cout << a[i];

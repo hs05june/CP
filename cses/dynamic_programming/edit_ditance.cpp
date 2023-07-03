@@ -1,8 +1,8 @@
 #include<bits/stdc++.h>
 #define rp(i,a,n) for(int i=a;i<n;i++)
-#define rep(i,a,n) for(int i=a;i<=n;i++)
+#define rep(i,a,n) for(int i=a;i>=n;i--)
 #define ll long long
-#define int long long
+#define ld long double
 #define deq vector<ll>
 #define mii map<ll,ll>
 #define pii pair<ll,ll>
@@ -15,39 +15,31 @@
 const ll M = 1000000007;
 using namespace std;
 
-string a,b;
-int dp[5007][5007];
-
-int solve(int ia,int ib){
-    if(ia==sz(a) || ib==sz(b)){
-        return abs(abs(sz(b)-ib)-abs(sz(a)-ia));
-    }
-
-    if(dp[ia][ib]!=-1)return dp[ia][ib];
-
-    int ans = INT_MAX;
-
-    if(a[ia]==b[ib]){
-        ans = min(ans,solve(ia+1,ib+1));
-    }
-    else{
-        ans = min(ans,1+solve(ia+1,ib+1));
-    }
-
-    ans = min(ans,1+solve(ia+1,ib));
-    ans = min(ans,1+solve(ia,ib+1));
-    return dp[ia][ib] = ans;
-}
-
 signed main(){
     ios_base::sync_with_stdio(0);
     cin.tie(0);cout.tie(0);
     cout << fixed << setprecision(20);
 
-    memset(dp,-1,sizeof(dp));
-
+    string a,b;
     cin >> a >> b;
 
-    cout << solve(0,0);
+    int n = a.size(), m = b.size();
+
+    int dp[n+1][m+1];
+
+    rp(i,0,n+1)dp[i][0] = i;
+    rp(i,0,m+1)dp[0][i] = i;
+    dp[0][0] = 0;
+
+    rp(i,1,n+1){
+        rp(j,1,m+1){
+            dp[i][j] = INT_MAX;
+            dp[i][j] = min(dp[i][j], (a[i-1] != b[j-1]) + dp[i-1][j-1]);
+            dp[i][j] = min(dp[i][j], 1 + dp[i-1][j]);
+            dp[i][j] = min(dp[i][j], 1 + dp[i][j-1]);
+        }
+    }
+
+    cout << dp[n][m] << "\n";
 
     return 0;}

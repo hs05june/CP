@@ -3,7 +3,6 @@
 #define rep(i,a,n) for(int i=a;i>=n;i--)
 #define ll long long
 #define ld long double
-#define int long long
 #define deq vector<ll>
 #define mii map<ll,ll>
 #define pii pair<ll,ll>
@@ -32,13 +31,41 @@ signed main(){
     cin.tie(0);cout.tie(0);
     cout << fixed << setprecision(20);
 
-    int t = 1;
-    cin >> t;
+    string a;
+    cin >> a;
 
-    while(t--){
+    int n = a.size();
 
-        
+    int pi[n];
+    pi[0] = 0;
 
+    int j = 0, i = 1;
+
+    while(i < n){
+        if(a[j]==a[i]){
+            ++j;
+            pi[i] = j;
+            ++i;
+        }
+        else{
+            if(j==0){
+                pi[i] = 0;
+                ++i;
+            }
+            else{
+                j = pi[j-1];
+            }
+        }
     }
+
+    multiset<int> ans;
+
+    int x = pi[n-1];
+    while(x!=0){
+        ans.insert(x);
+        x = pi[x-1];
+    }
+
+    for(auto i : ans)cout << i << " ";
 
     return 0;}

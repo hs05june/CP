@@ -15,23 +15,6 @@
 const ll M = 1000000007;
 using namespace std;
 
-ll dp[100007];
-ll child[100007];
-deq graph[100007];
-
-ll dfs(int n){
-    if(dp[n]!=-1)return dp[n];
-    ll ans = INT_MIN;
-    for(auto i : graph[n]){
-        ll x = dfs(i);
-        if(ans < x){
-            ans = x;
-            child[n] = i;
-        }
-    }
-    return dp[n] = 1 + ans;
-}
-
 signed main(){
     ios_base::sync_with_stdio(0);
     cin.tie(0);cout.tie(0);
@@ -40,36 +23,42 @@ signed main(){
     int n,m;
     cin >> n >> m;
 
-    rp(i,0,n+1)dp[i] = -1;
+    deq graph[n+1];
+    int indegree[n+1];
 
-    dp[n] = 1;
+    rp(i,0,n+1)indegree[i] = 0;
 
     rp(i,0,m){
         int a,b;
         cin >> a >> b;
+        indegree[b]++;
         graph[a].pb(b);
     }
 
-    ll ans = dfs(1);
+    multiset<pii> kahn;
+    deq st;
 
-    if(ans <= 0){
-        cout << "IMPOSSIBLE" << endl;
+    rp(i,1,n+1){
+        kahn.insert({indegree[i],i});
+    }
+
+    while(!kahn.empty() && (*(kahn.begin())).f == 0){
+        auto itr = *(kahn.begin());
+        int x = itr.f, y = itr.s;
+        kahn.erase(kahn.begin());
+        st.pb(y);
+        for(auto i : graph[y]){
+            kahn.erase({indegree[i],i});
+            indegree[i]--;
+            kahn.insert({indegree[i],i});
+        }
+    }
+
+    if(st.size()!=n){
+        cout << "IMPOSSIBLE\n";
         return 0;
     }
 
-    cout << ans << "\n";
-
-    int x = 1;
-    deq path;
-    while(x!=0){
-        path.pb(x);
-        x = child[x];
-    }
-
-    for(auto i : path){
-        cout << i << " ";
-    }
-
-    cout << "\n";
+    for(auto i : st)cout << i << " ";
 
     return 0;}

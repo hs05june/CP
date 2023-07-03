@@ -33,45 +33,45 @@ signed main(){
     cout << fixed << setprecision(20);
 
     int t = 1;
-    cin >> t;
+    // cin >> t;
 
     while(t--){
-
-        ll n;
+        
+        int n;
         cin >> n;
 
-        mii cnt;
-        ll m = n;
+        int arr[n];
+        multiset<int> ele;
+        rp(i,0,n){cin >> arr[i];ele.insert(arr[i]);}
 
-        deq ans;
+        int ans = LLONG_MAX;
+        deq mi;
 
-        rp(i,0,n){
-            ll a;
-            cin >> a;
-            cnt[a]++;
+        for(auto i : ele){
+            if(sz(mi) >= 2)break;
+            mi.pb(i);
+        }
+        
+        ans = min(ans, (int)(ceil((ld)mi[0] / (ld)2) + ceil((ld)mi[1] / (ld)2)));
+
+        rp(i,0,n-1){
+            int maxi = max(arr[i],arr[i+1]);
+            int mini = min(arr[i],arr[i+1]);
+            if(maxi >= 2*mini){
+                ans = min(ans, (int)(ceil((ld)maxi / (ld)2)));
+            }
+            else{
+                ans = min(ans, (int)(ceil(((ld)maxi + (ld)mini)/(ld)3)));
+            }
         }
 
-        int maxi = cnt[0];
-
-        rp(i,0,n+1){
-            if(maxi == 0){
-                break;
-            }
-            if(cnt[i] < maxi){
-                int z = maxi - cnt[i];
-                m -= z * i;
-                rp(j,0,z)ans.pb(i);
-                maxi = cnt[i];
-            }
+        rp(i,0,n-2){
+            int maxi = max(arr[i],arr[i+2]);
+            int mini = min(arr[i],arr[i+2]);
+            ans = min(ans, (int)(ceil((ld)(maxi-mini)/(ld)2)) + mini);
         }
 
-        rp(i,0,m)ans.pb(0);
-
-        sort(all(ans));
-        reverse(all(ans));
-        cout << sz(ans) << "\n";
-        for(auto i : ans)cout << i << " ";
-        cout << "\n";
+        cout << ans << "\n";
 
     }
 

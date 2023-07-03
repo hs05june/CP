@@ -2,6 +2,7 @@
 #define rp(i,a,n) for(int i=a;i<n;i++)
 #define rep(i,a,n) for(int i=a;i>=n;i--)
 #define ll long long
+#define ld long double
 #define int long long
 #define deq vector<ll>
 #define mii map<ll,ll>
@@ -35,15 +36,21 @@ signed main(){
     cin >> t;
 
     while(t--){
-        int n,k;
-        cin >> n >> k;
-        int x = k;
-        int ans = 1;
-        rp(i,0,min(n,k)){
-            ans = (ans%M * x%M)%M;
-            x--;
+
+        int n,x,k,p;
+        cin >> n >> x >> k >> p;
+
+        if(k <= x){
+            cout << p + k*10 << "\n";
         }
-        cout << ans << "\n";
+        else if(k > x && k < n){
+            cout << p + 10*x + 5*(k-x) << "\n";
+        }
+        else{
+            cout << p + 10*x + 5*(k-x) + 20 << "\n";
+        }
+
+
     }
 
     return 0;}

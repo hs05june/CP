@@ -1,8 +1,8 @@
 #include<bits/stdc++.h>
 #define rp(i,a,n) for(int i=a;i<n;i++)
-#define rep(i,a,n) for(int i=a;i<=n;i++)
+#define rep(i,a,n) for(int i=a;i>=n;i--)
 #define ll long long
-// #define int long long
+#define ld long double
 #define deq vector<ll>
 #define mii map<ll,ll>
 #define pii pair<ll,ll>
@@ -15,37 +15,20 @@
 const ll M = 1000000007;
 using namespace std;
 
-int power(int a, int b, int mod){
-    int ans = 1;
-    while (b > 0){
-        if (b & 1){ans = (ans%mod * 1LL * a%mod) % mod;}
-        a = (a%mod * 1LL * a%mod) % mod;
-        b >>= 1;}
-    return ans%mod;}
+int dp[100007][107];
+int arr[100007];
 
-ll modInverse(ll n,ll mod){
-    return power(n,mod-2,mod)%mod;}
-
-int n,m;
-
-int dp[107][100007],arr[100007];
-
-int solve(int index, int value){
-    if(index==n && (arr[index]==0 || arr[index]==value)){
-        return 1%M;
+int solve(int ind, int value, int n, int m){
+    if(ind==n-1 && (arr[ind] == 0 || arr[ind] == value))return 1%M;
+    if(dp[ind][value] != -1) return dp[ind][value];
+    if(arr[ind] != 0 && arr[ind] != value){
+        return dp[ind][value] = 0;
     }
-
-    if(dp[value][index]!=-1)return dp[value][index];
-
-    if(arr[index]!=0){
-        if(value!=arr[index])return dp[value][index]=0;
-    }
-
-    int ans = 0;
-    if(value>=1 && value<=m)ans = (ans%M + solve(index+1,value)%M)%M;
-    if(value+1>=1 && value+1<=m)ans = (ans%M + solve(index+1,value+1)%M)%M;
-    if(value-1>=1 && value-1<=m)ans = (ans%M + solve(index+1,value-1)%M)%M;
-    return dp[value][index] = (ans%M);
+    ll ans = 0;
+    ans = (ans%M + 0LL + solve(ind+1,value,n,m)%M)%M;
+    if(value+1 <= m) ans = (ans%M + 0LL + solve(ind+1,value+1,n,m)%M)%M;
+    if(value-1 >= 1) ans = (ans%M + 0LL + solve(ind+1,value-1,n,m)%M)%M;
+    return dp[ind][value] = ans;
 }
 
 signed main(){
@@ -53,23 +36,24 @@ signed main(){
     cin.tie(0);cout.tie(0);
     cout << fixed << setprecision(20);
 
-    memset(dp,-1,sizeof(dp));
-
+    int n,m;
     cin >> n >> m;
 
-    rep(i,1,n)cin >> arr[i];
-
-    int start = n+1;
-
-    if(arr[0]!=0){
-        cout << solve(1,arr[0])%M<<"\n";
+    rp(i,0,n){
+        cin >> arr[i];
     }
-    else{
-        int ans = 0;
-        rep(i,1,m){
-            ans = (ans%M + solve(1,i)%M)%M;
+
+    rp(i,0,n+1){
+        rp(j,0,m+1){
+            dp[i][j] = -1;
         }
-        cout << ans%M << "\n";
     }
+
+    ll ans = 0;
+    rp(i,1,m+1){
+        ans = (ans%M + solve(0,i,n,m)%M)%M;
+    }
+
+    cout << ans << "\n";
 
     return 0;}

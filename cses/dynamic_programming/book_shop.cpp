@@ -1,8 +1,8 @@
 #include<bits/stdc++.h>
 #define rp(i,a,n) for(int i=a;i<n;i++)
-#define rep(i,a,n) for(int i=a;i<=n;i++)
-#define ll long long
-// #define int long long
+#define rep(i,a,n) for(int i=a;i>=n;i--)
+#define ll int
+#define ld long double
 #define deq vector<ll>
 #define mii map<ll,ll>
 #define pii pair<ll,ll>
@@ -15,26 +15,30 @@
 const ll M = 1000000007;
 using namespace std;
 
-int dp[1007][100007];
+ll dp[1007][100007];
 
 signed main(){
     ios_base::sync_with_stdio(0);
     cin.tie(0);cout.tie(0);
     cout << fixed << setprecision(20);
 
-    int n,x;
+    ll n,x;
     cin >> n >> x;
 
-    int h[n+1]={0},s[n+1]={0};
+    ll price[n+1] = {0}, pages[n+1]={0};
 
-    rep(i,1,n)cin >> h[i];
-    rep(i,1,n)cin >> s[i];
+    rp(i,1,n+1)cin >> price[i];
+    rp(i,1,n+1)cin >> pages[i];
 
-    rep(i,1,n){
-        rep(j,1,x){
+    rp(i,0,n+1){
+        rp(j,0,x+1) dp[i][j] = 0;
+    }
+
+    rp(i,1,n+1){
+        rp(j,1,x+1){
             dp[i][j] = dp[i-1][j];
-            if((j-h[i])>=0){
-                dp[i][j] = max(dp[i][j],s[i]+dp[i-1][j-h[i]]);
+            if(j-price[i] >= 0){
+                dp[i][j] = max(dp[i][j], pages[i] + dp[i-1][j-price[i]]);
             }
         }
     }

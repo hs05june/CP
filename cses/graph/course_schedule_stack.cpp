@@ -15,21 +15,24 @@
 const ll M = 1000000007;
 using namespace std;
 
-ll dp[100007];
-ll child[100007];
 deq graph[100007];
+int visited[100007], st[100007];
+stack<int> ans;
+bool check;
 
-ll dfs(int n){
-    if(dp[n]!=-1)return dp[n];
-    ll ans = INT_MIN;
+void dfs(int n){
+    st[n] = 1;
     for(auto i : graph[n]){
-        ll x = dfs(i);
-        if(ans < x){
-            ans = x;
-            child[n] = i;
+        if(visited[i]==1 && st[i]==1){
+            check = true;
+        }
+        if(visited[i]==0){
+            visited[i] = 1;
+            dfs(i);
         }
     }
-    return dp[n] = 1 + ans;
+    ans.push(n);
+    st[n] = 0;
 }
 
 signed main(){
@@ -40,36 +43,28 @@ signed main(){
     int n,m;
     cin >> n >> m;
 
-    rp(i,0,n+1)dp[i] = -1;
-
-    dp[n] = 1;
-
     rp(i,0,m){
         int a,b;
         cin >> a >> b;
         graph[a].pb(b);
     }
 
-    ll ans = dfs(1);
+    check = false;
 
-    if(ans <= 0){
-        cout << "IMPOSSIBLE" << endl;
+    rp(i,1,n+1){
+        if(visited[i]==0){
+            visited[i] = 1;
+            dfs(i);}
+    }
+
+    if(check){
+        cout << "IMPOSSIBLE\n";
         return 0;
     }
 
-    cout << ans << "\n";
-
-    int x = 1;
-    deq path;
-    while(x!=0){
-        path.pb(x);
-        x = child[x];
+    while(!ans.empty()){
+        cout << ans.top() << " ";
+        ans.pop();
     }
-
-    for(auto i : path){
-        cout << i << " ";
-    }
-
-    cout << "\n";
 
     return 0;}
