@@ -1,8 +1,8 @@
 #include<bits/stdc++.h>
 #define rp(i,a,n) for(int i=a;i<n;i++)
-#define rep(i,a,n) for(int i=a;i<=n;i++)
+#define rep(i,a,n) for(int i=a;i>=n;i--)
 #define ll long long
-#define int long long
+#define ld long double
 #define deq vector<ll>
 #define mii map<ll,ll>
 #define pii pair<ll,ll>
@@ -39,29 +39,36 @@ signed main(){
         int n;
         cin >> n;
 
-        string a;
-        cin >> a;
+        string a,b;
+        cin >> a >> b;
 
-        int index[3] = {0};
+        if(a == b){
+            cout << "0\n";
+            continue;
+        }
+
+        ll match[2] = {0,0}, mismatch[2] = {0,0};
 
         rp(i,0,n){
-            if(a[i]=='1'){
-                index[(i%3)]++;
+            if(a[i]==b[i]){
+                match[a[i]-'0']++;
+            }
+            else{
+                mismatch[a[i]-'0']++;
             }
         }
 
-        bool ans = false;
+        ll ans = LLONG_MAX;
 
-        rp(i,0,3){
-            if(index[i]>=2){
-                ans = true;
-            }
-            if(index[i]!=0 && index[(i+1)%3]!=0){
-                ans = true;
-            }
+        if(match[1]-match[0]==1)ans = min(ans,match[0]+match[1]);
+        if(mismatch[1]==mismatch[0]) ans = min(ans,mismatch[0]+mismatch[1]);
+
+        if(ans == LLONG_MAX){
+            cout << "-1\n";
+            continue;
         }
 
-        ans ? cout << "1\n" : cout << "2\n";
+        cout << ans << "\n";
 
     }
 

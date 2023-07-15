@@ -1,8 +1,9 @@
 #include<bits/stdc++.h>
 #define rp(i,a,n) for(int i=a;i<n;i++)
-#define rep(i,a,n) for(int i=a;i<=n;i++)
+#define rep(i,a,n) for(int i=a;i>=n;i--)
 #define ll long long
 #define int long long
+#define ld long double
 #define deq vector<ll>
 #define mii map<ll,ll>
 #define pii pair<ll,ll>
@@ -37,45 +38,33 @@ signed main(){
     while(t--){
 
         int n;
-
         cin >> n;
 
-        mii cnt;
-        int a[n];
+        int arr[n+1];
 
-        int sum = 0;
+        rp(i,1,n+1)cin >> arr[i];
 
-        rp(i,0,n){
-            cin >> a[i];
-            cnt[a[i]]++;
+        int preff[n+1], suff[n+1];
+        preff[0] = 0;
+
+        int ans = 0, diff = LLONG_MIN;
+        rp(i,1,n+1){
+            preff[i] = preff[i-1] + arr[i];
         }
 
-        bool ans = false;
+        suff[n] = preff[n];
+        rep(i,n-1,0){
+            suff[i] = min(suff[i+1],preff[i]);
+        }
 
-        for(auto i : cnt){
-            if(((i.s)%(i.f))!=0){
-                ans = true;
+        rp(i,0,n+1){
+            if(diff < preff[i] - suff[i]){
+                diff = preff[i] - suff[i];
+                ans = preff[i];
             }
-            sum+=i.s;
         }
 
-        if(ans || sum!=n){
-            cout << "-1\n";
-            continue;
-        }
-
-        int to_fill[n+1] = {0},num = 0;
-
-        rp(i,0,n){
-            if((cnt[a[i]]%a[i])==0){
-                ++num;
-                to_fill[a[i]] = num;
-            }
-            cout << to_fill[a[i]] << " ";
-            cnt[a[i]]--;
-        }
-        cout << "\n";
-
+        cout << ans << "\n";
     }
 
     return 0;}

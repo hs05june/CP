@@ -15,6 +15,20 @@
 const ll M = 1000000007;
 using namespace std;
 
+int n;
+pii arr[200007];
+
+bool check(int mid){
+    int ans = 0, z = mid;
+    rp(i,0,n){
+        if(arr[i].f >= (z-1) && arr[i].s >= ans){
+            ans ++;
+            z--;
+        }
+    }
+    return ans >= mid;
+}
+
 signed main(){
     ios_base::sync_with_stdio(0);
     cin.tie(0);cout.tie(0);
@@ -24,20 +38,25 @@ signed main(){
     cin >> t;
 
     while(t--){
-        int n;
+
         cin >> n;
+        rp(i,0,n) cin >> arr[i].f >> arr[i].s;
 
-        int arr[n];
-        rp(i,0,n)cin >> arr[i];
+        int low = 1, high = n;
 
-        ll ans = 0, value = arr[0];
-        rp(i,1,n){
-            ans += abs(arr[i]-arr[i-1]);
-            if(arr[i] < arr[i-1]){
-                value -= (arr[i-1]-arr[i]);
+        while(high - low > 1){
+            int mid = (low + high) / 2;
+            if(check(mid)){
+                low = mid;
             }
-        }        
-        cout << ans + abs(value) << "\n";
+            else{
+                high = mid - 1;
+            }
+        }
+
+        if(check(high)) cout << high << "\n";
+        else cout << low << "\n";
+
     }
 
     return 0;}

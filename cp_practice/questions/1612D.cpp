@@ -15,6 +15,17 @@
 const ll M = 1000000007;
 using namespace std;
 
+bool solve(ll a, ll b, ll x){
+    if(a==x || b==x)return true;
+    if(a==0 || b==0)return false;
+    ll y1 = a%b, y2 = a / b;
+    if(x >= y1 && x <= a){
+        // int k = (a+b-x)/b;
+        if((a+b-x)%b == 0)return true;
+    }
+    return solve(b,y1,x);
+}
+
 signed main(){
     ios_base::sync_with_stdio(0);
     cin.tie(0);cout.tie(0);
@@ -24,20 +35,18 @@ signed main(){
     cin >> t;
 
     while(t--){
-        int n;
-        cin >> n;
 
-        int arr[n];
-        rp(i,0,n)cin >> arr[i];
+        ll a,b,x;
+        cin >> a >> b >> x;
 
-        ll ans = 0, value = arr[0];
-        rp(i,1,n){
-            ans += abs(arr[i]-arr[i-1]);
-            if(arr[i] < arr[i-1]){
-                value -= (arr[i-1]-arr[i]);
-            }
-        }        
-        cout << ans + abs(value) << "\n";
+        if(a < b)swap(a,b);
+
+        if(solve(a,b,x)){
+            cout << "YES\n";
+        }
+        else{
+            cout << "NO\n";
+        }
     }
 
     return 0;}

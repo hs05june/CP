@@ -3,6 +3,7 @@
 #define rep(i,a,n) for(int i=a;i>=n;i--)
 #define ll long long
 #define ld long double
+#define int long long
 #define deq vector<ll>
 #define mii map<ll,ll>
 #define pii pair<ll,ll>
@@ -15,6 +16,7 @@
 const ll M = 1000000007;
 using namespace std;
 
+
 signed main(){
     ios_base::sync_with_stdio(0);
     cin.tie(0);cout.tie(0);
@@ -24,20 +26,27 @@ signed main(){
     cin >> t;
 
     while(t--){
-        int n;
+
+        ll n;
         cin >> n;
 
-        int arr[n];
-        rp(i,0,n)cin >> arr[i];
+        mii topic, difficulty;
 
-        ll ans = 0, value = arr[0];
-        rp(i,1,n){
-            ans += abs(arr[i]-arr[i-1]);
-            if(arr[i] < arr[i-1]){
-                value -= (arr[i-1]-arr[i]);
-            }
-        }        
-        cout << ans + abs(value) << "\n";
+        pii a[n];
+
+        rp(i,0,n){
+            cin >> a[i].f >> a[i].s;
+            topic[a[i].f]++;
+            difficulty[a[i].s]++;
+        }
+
+        ll exclude = 0;
+        rp(i,0,n){
+            exclude += ((topic[a[i].f]-1) * (difficulty[a[i].s]-1));
+        }
+
+        cout << (n*(n-1)*(n-2)) / 6 - exclude << "\n";
+
     }
 
     return 0;}

@@ -1,8 +1,8 @@
 #include<bits/stdc++.h>
 #define rp(i,a,n) for(int i=a;i<n;i++)
-#define rep(i,a,n) for(int i=a;i<=n;i++)
+#define rep(i,a,n) for(int i=a;i>=n;i--)
 #define ll long long
-#define int long long
+#define ld long double
 #define deq vector<ll>
 #define mii map<ll,ll>
 #define pii pair<ll,ll>
@@ -36,23 +36,20 @@ signed main(){
 
     while(t--){
 
-        int n;
-        cin >> n;
+        ll x,y;
+        cin >> x >> y;
 
-        string a[2];
-
-        cin >> a[0] >> a[1];
-
-        map<char,int> m[2];
-
-        rp(i,0,2){
-            rp(j,0,n){
-                m[i][a[i][j]]++;
-            }
+        if(y % x == 0){
+            cout << x << "\n";
         }
-
-        m[0]['0']==m[1]['0'] && m[1]['1']==m[0]['1'] ? cout << "YES\n" : cout << "NO\n";
+        else if(y < x){
+            cout << x+y << "\n";
+        }
+        else{
+            ll z = y / x;
+            cout << (z*x + y)/2 << "\n";
+        }
 
     }
 
-    return 0;}  
+    return 0;}
